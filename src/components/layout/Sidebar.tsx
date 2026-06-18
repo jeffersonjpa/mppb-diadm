@@ -24,7 +24,7 @@ const NAV: NavItem[] = [
   { href: '/visao-geral',   label: 'Visão Geral',         icon: LayoutGrid },
   { href: '/terceirizados', label: 'Terceirizados',        icon: Users },
   { href: '/energia',       label: 'Energia Elétrica',     icon: Zap },
-  { href: '/agua',          label: 'Água e Esgoto',        icon: Droplets, soon: true },
+  { href: '/agua',          label: 'Água e Esgoto',        icon: Droplets },
   { href: '/telefonia',     label: 'Telefonia',            icon: Phone,    soon: true },
   { href: '/combustivel',   label: 'Combustível e Frota',  icon: Fuel,     soon: true },
   { href: '/material',      label: 'Material de Consumo',  icon: Package,  soon: true },
