@@ -9,6 +9,7 @@ import usersData from '@/data/users.json';
 const users = usersData as LocalUser[];
 
 export const authConfig: NextAuthConfig = {
+  trustHost: true,
   providers: [
     Google,
     Credentials({
