@@ -37,13 +37,6 @@ export const authConfig: NextAuthConfig = {
   ],
 
   callbacks: {
-    signIn({ account, profile }) {
-      if (account?.provider === 'google') {
-        return !!profile?.email?.endsWith('@mppb.mp.br');
-      }
-      return true;
-    },
-
     jwt({ token, user }) {
       if (user) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
