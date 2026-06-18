@@ -1,40 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { credentialsLogin } from './actions';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function handleCredentials(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
-
-    setLoading(false);
-
-    if (result?.error) {
-      setError('Email ou senha incorretos.');
-    } else {
-      router.push('/visao-geral');
-    }
-  }
+  const [error, formAction, isPending] = useActionState(credentialsLogin, undefined);
 
   async function handleGoogle() {
-    setError('');
-    await signIn('google', { callbackUrl: '/visao-geral' });
+    await signIn('google', { redirectTo: '/visao-geral' });
   }
 
   return (
@@ -77,19 +52,18 @@ export default function LoginPage() {
           <div className="flex-1 h-px bg-mp-border" />
         </div>
 
-        {/* Formulário */}
-        <form onSubmit={handleCredentials} className="flex flex-col gap-4">
+        {/* Formulário com Server Action */}
+        <form action={formAction} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="email" className="text-[12px] font-medium text-mp-secondary">
               Email
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               autoComplete="email"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               className="rounded-[var(--radius-mp-input)] border border-mp-border px-3 py-2 text-[13px] text-mp-text placeholder:text-mp-ghost outline-none focus:border-mp-primary focus:ring-2 focus:ring-mp-primary/20 transition-colors"
               placeholder="jefferson@mppb.mp.br"
             />
@@ -101,11 +75,10 @@ export default function LoginPage() {
             </label>
             <input
               id="password"
+              name="password"
               type="password"
               autoComplete="current-password"
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               className="rounded-[var(--radius-mp-input)] border border-mp-border px-3 py-2 text-[13px] text-mp-text placeholder:text-mp-ghost outline-none focus:border-mp-primary focus:ring-2 focus:ring-mp-primary/20 transition-colors"
               placeholder="••••••••"
             />
@@ -119,10 +92,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={isPending}
             className="mt-1 w-full bg-mp-primary hover:bg-mp-primary-dark text-white font-semibold text-[13px] rounded-[var(--radius-mp-input)] px-4 py-2.5 transition-colors disabled:opacity-60"
           >
-            {loading ? 'Entrando…' : 'Entrar'}
+            {isPending ? 'Entrando…' : 'Entrar'}
           </button>
         </form>
       </div>
