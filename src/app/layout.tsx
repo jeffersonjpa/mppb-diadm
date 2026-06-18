@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import ShellClient from '@/components/layout/ShellClient';
+import Providers from '@/components/layout/Providers';
 
 export const metadata: Metadata = {
   title: 'BI Administrativo — MPPB',
@@ -13,7 +14,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="h-full antialiased">
       <body className="h-full">
-        <ShellClient>{children}</ShellClient>
+        <Providers>
+          <ShellClient>{children}</ShellClient>
+        </Providers>
       </body>
     </html>
   );

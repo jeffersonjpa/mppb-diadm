@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 import {
   LayoutGrid,
   Users,
@@ -13,6 +14,7 @@ import {
   Fuel,
   Package,
   X,
+  LogOut,
 } from 'lucide-react';
 
 interface NavItem {
@@ -32,6 +34,46 @@ const NAV: NavItem[] = [
   { href: '/combustivel', label: 'Combustível e Frota', icon: Fuel, soon: true },
   { href: '/material', label: 'Material de Consumo', icon: Package, soon: true },
 ];
+
+const ROLE_LABEL: Record<string, string> = {
+  admin: 'Administrador',
+  gestor: 'Gestor',
+  analista: 'Analista',
+  consulta: 'Consulta',
+};
+
+function UserFooter() {
+  const { data: session } = useSession();
+
+  return (
+    <div className="px-4 py-3 border-t border-mp-border shrink-0">
+      {session?.user ? (
+        <div className="flex items-center gap-2.5">
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-semibold text-mp-text truncate leading-tight">
+              {session.user.name}
+            </p>
+            <p className="text-[11px] text-mp-ghost truncate leading-tight">
+              {ROLE_LABEL[session.user.role] ?? session.user.role}
+            </p>
+          </div>
+          <button
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            title="Sair"
+            className="p-1.5 rounded text-mp-muted hover:text-mp-danger hover:bg-mp-danger-bg transition-colors shrink-0"
+            aria-label="Sair"
+          >
+            <LogOut size={15} strokeWidth={2} />
+          </button>
+        </div>
+      ) : (
+        <p className="text-[11px] text-mp-ghost leading-snug">
+          Ministério Público do Estado da Paraíba
+        </p>
+      )}
+    </div>
+  );
+}
 
 interface SidebarProps {
   open: boolean;
@@ -131,12 +173,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
           </ul>
         </nav>
 
-        {/* Rodapé */}
-        <div className="px-5 py-4 border-t border-mp-border shrink-0">
-          <p className="text-[11px] text-mp-ghost leading-snug">
-            Ministério Público do Estado da Paraíba
-          </p>
-        </div>
+        {/* Rodapé — perfil do usuário */}
+        <UserFooter />
       </aside>
     </>
   );
