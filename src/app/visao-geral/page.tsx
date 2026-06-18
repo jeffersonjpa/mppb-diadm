@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import {
-  Users, Zap, Droplets, Phone, Fuel, Package,
+  Users, Zap, Droplets, Mail, Phone, Fuel, Package,
   ArrowRight, TrendingUp,
 } from 'lucide-react';
-import { formatBRL } from '@/lib/format';
+import { formatBRL, formatMonthYear } from '@/lib/format';
 import { getSerieMensal as getEnergiaSerie } from '@/lib/api/energia';
 import { getSerieMensal as getTerceirizadosSerie } from '@/lib/api/terceirizados';
+import { getSerieMensal as getAguaSerie } from '@/lib/api/agua';
+import { getSerieMensal as getCorreiosSerie } from '@/lib/api/correios';
 
 /* ── Dados do mês mais recente da Energia (Fev/2026) ───────────── */
 function getEnergiaResumo() {
@@ -31,6 +33,30 @@ function getTerceirizadosResumo() {
   return { valor: ultimo.valorTotal, variacao, totalContratos: ultimo.registros, mes: ultimo.mes, ano: ultimo.ano };
 }
 
+/* ── Dados do mês mais recente de Água e Esgoto (Abr/2026) ──────── */
+function getAguaResumo() {
+  const serie = getAguaSerie([2026]);
+  const ultimo = serie.at(-1);
+  const penultimo = serie.at(-2);
+  if (!ultimo) return null;
+  const variacao = penultimo && penultimo.valorTotal > 0
+    ? ((ultimo.valorTotal - penultimo.valorTotal) / penultimo.valorTotal * 100)
+    : null;
+  return { valor: ultimo.valorTotal, variacao, mes: ultimo.mes, ano: ultimo.ano };
+}
+
+/* ── Dados do mês mais recente dos Correios (Fev/2026) ──────────── */
+function getCorreiosResumo() {
+  const serie = getCorreiosSerie([2026]);
+  const ultimo = serie.at(-1);
+  const penultimo = serie.at(-2);
+  if (!ultimo) return null;
+  const variacao = penultimo && penultimo.valorTotal > 0
+    ? ((ultimo.valorTotal - penultimo.valorTotal) / penultimo.valorTotal * 100)
+    : null;
+  return { valor: ultimo.valorTotal, variacao, totalObjetos: ultimo.quantidade, mes: ultimo.mes, ano: ultimo.ano };
+}
+
 /* ── Definição dos módulos ─────────────────────────────────────── */
 interface ModuleCard {
   id:       string;
@@ -46,6 +72,8 @@ interface ModuleCard {
 export default function VisaoGeralPage() {
   const energiaResumo = getEnergiaResumo();
   const terceirizadosResumo = getTerceirizadosResumo();
+  const aguaResumo = getAguaResumo();
+  const correiosResumo = getCorreiosResumo();
 
   const modulos: ModuleCard[] = [
     {
@@ -64,8 +92,17 @@ export default function VisaoGeralPage() {
     },
     {
       id: 'agua', href: '/agua', label: 'Água e Esgoto',
-      icon: Droplets, ativo: false,
-      subtitulo: 'Em integração',
+      icon: Droplets, ativo: true,
+      valor:    aguaResumo?.valor,
+      variacao: aguaResumo?.variacao,
+      subtitulo: aguaResumo ? `${formatMonthYear(aguaResumo.mes, aguaResumo.ano)} · CAGEPA` : 'Em integração',
+    },
+    {
+      id: 'correios', href: '/correios', label: 'Correios',
+      icon: Mail, ativo: true,
+      valor:    correiosResumo?.valor,
+      variacao: correiosResumo?.variacao,
+      subtitulo: correiosResumo ? `${formatMonthYear(correiosResumo.mes, correiosResumo.ano)} · ${correiosResumo.totalObjetos} objetos` : 'Em integração',
     },
     {
       id: 'telefonia', href: '/telefonia', label: 'Telefonia',
@@ -135,7 +172,7 @@ export default function VisaoGeralPage() {
         <div className="mt-4 flex items-center gap-2">
           <TrendingUp size={14} className="text-white/50" strokeWidth={2} />
           <p className="text-[12px] text-white/60">
-            Referência: Fevereiro de 2026
+            Referência: Fevereiro - Abril de 2026
           </p>
         </div>
       </div>

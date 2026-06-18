@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -7,6 +8,7 @@ import {
   Users,
   Zap,
   Droplets,
+  Mail,
   Phone,
   Fuel,
   Package,
@@ -14,24 +16,25 @@ import {
 } from 'lucide-react';
 
 interface NavItem {
-  href:    string;
-  label:   string;
-  icon:    React.ComponentType<{ size?: number; strokeWidth?: number }>;
-  soon?:   boolean;
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
+  soon?: boolean;
 }
 
 const NAV: NavItem[] = [
-  { href: '/visao-geral',   label: 'Visão Geral',         icon: LayoutGrid },
-  { href: '/terceirizados', label: 'Terceirizados',        icon: Users },
-  { href: '/energia',       label: 'Energia Elétrica',     icon: Zap },
-  { href: '/agua',          label: 'Água e Esgoto',        icon: Droplets },
-  { href: '/telefonia',     label: 'Telefonia',            icon: Phone,    soon: true },
-  { href: '/combustivel',   label: 'Combustível e Frota',  icon: Fuel,     soon: true },
-  { href: '/material',      label: 'Material de Consumo',  icon: Package,  soon: true },
+  { href: '/visao-geral', label: 'Visão Geral', icon: LayoutGrid },
+  { href: '/terceirizados', label: 'Terceirizados', icon: Users },
+  { href: '/energia', label: 'Energia Elétrica', icon: Zap },
+  { href: '/agua', label: 'Água e Esgoto', icon: Droplets },
+  { href: '/correios', label: 'Correios', icon: Mail },
+  { href: '/telefonia', label: 'Telefonia', icon: Phone, soon: true },
+  { href: '/combustivel', label: 'Combustível e Frota', icon: Fuel, soon: true },
+  { href: '/material', label: 'Material de Consumo', icon: Package, soon: true },
 ];
 
 interface SidebarProps {
-  open:    boolean;
+  open: boolean;
   onClose: () => void;
 }
 
@@ -40,46 +43,46 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Scrim mobile */}
+      {/* Scrim mobile — só aparece quando open=true, oculto em desktop */}
       {open && (
         <div
-          className="fixed inset-0 z-20 bg-[rgba(16,40,70,0.4)]"
-          style={{ display: 'none' }}
-          id="sidebar-scrim"
+          className="fixed inset-0 z-20 bg-[rgba(16,40,70,0.4)] min-[980px]:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
       )}
 
       <aside
-        className="
+        className={`
           fixed top-0 left-0 z-30 h-full w-[248px]
           bg-mp-surface border-r border-mp-border
           flex flex-col
-          transition-transform duration-[280ms] cubic-bezier(0.4,0,0.2,1)
-          sidebar-panel
-        "
+          transition-transform duration-[280ms]
+          ${open ? 'translate-x-0' : '-translate-x-full'}
+          min-[980px]:translate-x-0
+        `}
         aria-label="Navegação principal"
       >
         {/* Logo / cabeçalho */}
-        <div className="flex items-center justify-between h-[56px] px-5 border-b border-mp-border shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-7 h-7 rounded-[6px] flex items-center justify-center shrink-0"
-              style={{ background: 'linear-gradient(135deg, #1D5288 0%, #16406B 100%)' }}
-            >
-              <span className="text-white font-extrabold text-[11px] leading-none tracking-tight">MP</span>
-            </div>
-            <div>
-              <p className="text-[12px] font-800 text-mp-ink leading-none tracking-tight">BI Administrativo</p>
-              <p className="text-[10px] text-mp-muted mt-0.5 leading-none">MPPB</p>
-            </div>
+        <div className="flex items-start justify-between pt-3 pb-3 px-4 border-b border-mp-border shrink-0">
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <Image
+              src="/logoMPPB_color.png"
+              alt="MPPB"
+              width={360}
+              height={108}
+              className="h-[108px] w-auto object-contain"
+              priority
+            />
+            <p className="text-[11px] font-700 text-mp-ink leading-none tracking-tight px-1">
+              BI Administrativo
+            </p>
           </div>
 
           {/* Fechar (mobile) */}
           <button
             onClick={onClose}
-            className="sidebar-close-btn p-1 rounded text-mp-muted hover:text-mp-text hover:bg-mp-head transition-colors"
+            className="min-[980px]:hidden p-1 rounded text-mp-muted hover:text-mp-text hover:bg-mp-head transition-colors shrink-0 ml-1 mt-1"
             aria-label="Fechar menu"
           >
             <X size={18} strokeWidth={2} />
@@ -135,24 +138,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
           </p>
         </div>
       </aside>
-
-      <style>{`
-        /* Desktop: sidebar sempre visível */
-        @media (min-width: 980px) {
-          .sidebar-panel { transform: translateX(0) !important; }
-          .sidebar-close-btn { display: none; }
-          #sidebar-scrim { display: none !important; }
-        }
-
-        /* Mobile: sidebar como overlay */
-        @media (max-width: 979px) {
-          .sidebar-panel {
-            transform: ${open ? 'translateX(0)' : 'translateX(-100%)'};
-            box-shadow: var(--shadow-mp-overlay);
-          }
-          #sidebar-scrim { display: block !important; }
-        }
-      `}</style>
     </>
   );
 }

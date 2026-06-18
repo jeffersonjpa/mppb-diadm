@@ -12,9 +12,7 @@ export default function ShellClient({ children }: { children: React.ReactNode })
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Área principal — offset da sidebar em desktop */}
-      <div
-        className="flex flex-col flex-1 min-w-0 main-area"
-      >
+      <div className="flex flex-col flex-1 min-w-0 min-[980px]:ml-[248px]">
         <Topbar onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="flex-1 overflow-auto bg-mp-bg">
@@ -23,12 +21,6 @@ export default function ShellClient({ children }: { children: React.ReactNode })
           </div>
         </main>
       </div>
-
-      <style>{`
-        @media (min-width: 980px) {
-          .main-area { margin-left: 248px; }
-        }
-      `}</style>
     </div>
   );
 }

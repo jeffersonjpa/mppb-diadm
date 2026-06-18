@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Menu } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
@@ -8,6 +9,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/terceirizados': 'Terceirizados',
   '/energia':       'Energia Elétrica',
   '/agua':          'Água e Esgoto',
+  '/correios':      'Correios',
   '/telefonia':     'Telefonia',
   '/combustivel':   'Combustível e Frota',
   '/material':      'Material de Consumo',
@@ -28,7 +30,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
   return (
     <header
       className="
-        sticky top-0 z-10 h-[56px]
+        sticky top-0 z-10 min-h-[56px] py-2
         flex items-center gap-3 px-5
         border-b border-mp-border
         bg-[rgba(255,255,255,0.85)] backdrop-blur-[10px]
@@ -39,24 +41,28 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       {/* Botão hambúrguer (mobile) */}
       <button
         onClick={onMenuClick}
-        className="hamburger-btn p-1.5 -ml-1 rounded text-mp-muted hover:text-mp-text hover:bg-mp-head transition-colors"
+        className="min-[980px]:hidden p-1.5 -ml-1 rounded text-mp-muted hover:text-mp-text hover:bg-mp-head transition-colors"
         aria-label="Abrir menu"
       >
         <Menu size={20} strokeWidth={2} />
       </button>
 
       {/* Título da página */}
-      <h1
-        className="text-[20px] font-extrabold text-mp-ink tracking-[-0.3px] leading-none"
-      >
+      <h1 className="text-[20px] font-extrabold text-mp-ink tracking-[-0.3px] leading-none flex-1">
         {title}
       </h1>
 
-      <style>{`
-        @media (min-width: 980px) {
-          .hamburger-btn { display: none; }
-        }
-      `}</style>
+      {/* Logo DIADM — lado direito */}
+      <div className="flex items-center shrink-0">
+        <Image
+          src="/logotipo-diadm.png"
+          alt="Diretoria Administrativa — MPPB"
+          width={360}
+          height={120}
+          className="h-[120px] w-auto object-contain"
+          priority
+        />
+      </div>
     </header>
   );
 }
