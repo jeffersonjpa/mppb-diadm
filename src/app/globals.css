@@ -1,26 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ── Marca / primária ───────────────────────────────── */
+  --color-mp-primary:      #1D5288;
+  --color-mp-primary-dark: #16406B;
+  --color-mp-ink:          #16273B;
+
+  /* ── Texto ──────────────────────────────────────────── */
+  --color-mp-text:          #1F2A37;
+  --color-mp-secondary:     #475467;
+  --color-mp-muted:         #6B7480;
+  --color-mp-faint:         #8A94A3;
+  --color-mp-ghost:         #A6AEBA;
+
+  /* ── Superfícies & bordas ───────────────────────────── */
+  --color-mp-bg:            #F5F7FA;
+  --color-mp-surface:       #FFFFFF;
+  --color-mp-border:        #ECEEF1;
+  --color-mp-border-strong: #DEE3E9;
+  --color-mp-row-alt:       #FAFBFC;
+  --color-mp-head:          #F4F6F9;
+  --color-mp-tint:          #EAF1F8;
+
+  /* ── Estados semânticos ─────────────────────────────── */
+  --color-mp-success:       #1E7E25;
+  --color-mp-success-bg:    #E6F4E7;
+  --color-mp-danger:        #B23B3B;
+  --color-mp-danger-bg:     #FBEAEA;
+  --color-mp-warning:       #B98900;
+  --color-mp-warning-bg:    #FDF4E0;
+  --color-mp-accent:        #C2410C;
+  --color-mp-accent-bg:     #FCEEE3;
+
+  /* ── Tipografia ─────────────────────────────────────── */
+  --font-sans: 'Public Sans', system-ui, sans-serif;
+
+  /* ── Raios ──────────────────────────────────────────── */
+  --radius-mp-card:  14px;
+  --radius-mp-input: 8px;
+  --radius-mp-badge: 6px;
+  --radius-mp-hero:  16px;
+
+  /* ── Sombras ────────────────────────────────────────── */
+  --shadow-mp-card:    0 1px 2px rgba(16,40,70,0.04);
+  --shadow-mp-overlay: 0 20px 60px rgba(16,40,70,0.25);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ── Reset & base ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html, body { height: 100%; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-mp-bg);
+  color: var(--color-mp-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Keyframes ──────────────────────────────────────────── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sidebarIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fadeSlideIn 0.4s ease both;
+}
+
+/* ── Utilidades customizadas ────────────────────────────── */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
