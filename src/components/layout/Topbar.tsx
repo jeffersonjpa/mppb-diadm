@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { Menu } from 'lucide-react';
+import { Menu, LogOut } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 
 const PAGE_TITLES: Record<string, string> = {
   '/visao-geral':   'Visão Geral',
@@ -21,6 +22,7 @@ interface TopbarProps {
 
 export default function Topbar({ onMenuClick }: TopbarProps) {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   const title =
     Object.entries(PAGE_TITLES).find(([key]) =>
@@ -51,6 +53,23 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       <h1 className="text-[20px] font-extrabold text-mp-ink tracking-[-0.3px] leading-none flex-1">
         {title}
       </h1>
+
+      {/* Usuário + logout */}
+      {session?.user && (
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="hidden min-[980px]:block text-[12px] text-mp-secondary truncate max-w-[160px]">
+            {session.user.name}
+          </span>
+          <button
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            title="Sair"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-[12px] font-medium text-mp-muted hover:text-mp-danger hover:bg-mp-danger-bg transition-colors"
+          >
+            <LogOut size={15} strokeWidth={2} />
+            <span className="hidden min-[980px]:inline">Sair</span>
+          </button>
+        </div>
+      )}
 
       {/* Logo DIADM — lado direito */}
       <div className="flex items-center shrink-0">
