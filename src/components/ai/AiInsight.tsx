@@ -61,7 +61,17 @@ export default function AiInsight({ endpoint, payload, mockText }: AiInsightProp
     return () => { cancelled = true; };
   }, [payloadKey, endpoint, mockText, payload]);
 
-  if (error) return null;
+  if (error) return (
+    <div className="bg-mp-tint border border-mp-primary/20 rounded-mp-card px-5 py-3 flex items-center gap-2">
+      <span className="shrink-0 text-mp-muted opacity-60" aria-hidden>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
+          <path d="M8 7v4M8 5v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      </span>
+      <p className="text-[12px] text-mp-muted">Análise IA indisponível no momento.</p>
+    </div>
+  );
 
   return (
     <div className="bg-mp-tint border border-mp-primary/20 rounded-mp-card px-5 py-4 flex flex-col gap-3">

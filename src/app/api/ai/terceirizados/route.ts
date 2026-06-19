@@ -3,8 +3,10 @@ import OpenAI from 'openai';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import os from 'os';
 
-const CACHE_DIR = path.join(process.cwd(), 'ai-cache', 'terceirizados');
+const CACHE_DIR     = path.join(process.cwd(), 'ai-cache', 'terceirizados');
+const TMP_CACHE_DIR = path.join(os.tmpdir(), 'ai-cache', 'terceirizados');
 
 interface TerceirizadosAiPayload {
   periodoLabel: string;
@@ -63,29 +65,47 @@ Top cargos por custo total: ${topStr}
 `.trim();
 }
 
-export async function POST(req: NextRequest) {
-  const payload: TerceirizadosAiPayload = await req.json();
-
-  const key = buildCacheKey(payload);
-  const cacheFile = path.join(CACHE_DIR, `${key}.md`);
-
-  if (fs.existsSync(cacheFile)) {
-    return NextResponse.json({ text: fs.readFileSync(cacheFile, 'utf-8'), cached: true });
+function readCache(key: string): string | null {
+  for (const dir of [CACHE_DIR, TMP_CACHE_DIR]) {
+    try {
+      const file = path.join(dir, `${key}.md`);
+      if (fs.existsSync(file)) return fs.readFileSync(file, 'utf-8');
+    } catch { /* ignore */ }
   }
+  return null;
+}
 
-  const client = new OpenAI({ apiKey: process.env.GPT_API_KEY });
+function writeCache(key: string, text: string): void {
+  for (const dir of [CACHE_DIR, TMP_CACHE_DIR]) {
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, `${key}.md`), text, 'utf-8');
+      return;
+    } catch { /* try next */ }
+  }
+}
 
-  const completion = await client.chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages: [{ role: 'user', content: buildPrompt(payload) }],
-    max_tokens: 420,
-    temperature: 0.4,
-  });
+export async function POST(req: NextRequest) {
+  try {
+    const payload: TerceirizadosAiPayload = await req.json();
+    const key = buildCacheKey(payload);
 
-  const text = completion.choices[0]?.message?.content?.trim() ?? '';
+    const cached = readCache(key);
+    if (cached) return NextResponse.json({ text: cached, cached: true });
 
-  fs.mkdirSync(CACHE_DIR, { recursive: true });
-  fs.writeFileSync(cacheFile, text, 'utf-8');
+    const client = new OpenAI({ apiKey: process.env.GPT_API_KEY });
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: buildPrompt(payload) }],
+      max_tokens: 420,
+      temperature: 0.4,
+    });
 
-  return NextResponse.json({ text, cached: false });
+    const text = completion.choices[0]?.message?.content?.trim() ?? '';
+    writeCache(key, text);
+    return NextResponse.json({ text, cached: false });
+  } catch (err) {
+    console.error('[ai/terceirizados]', err);
+    return NextResponse.json({ error: String(err) }, { status: 500 });
+  }
 }
