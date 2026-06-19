@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { Droplets, TrendingUp, Activity } from 'lucide-react';
 
 import KpiCard       from '@/components/kpi/KpiCard';
+import AiInsight    from '@/components/ai/AiInsight';
 import FilterBar     from '@/components/filters/FilterBar';
 import SelectFilter  from '@/components/filters/SelectFilter';
 import ChartCard     from '@/components/charts/ChartCard';
@@ -190,6 +191,13 @@ export default function AguaClient() {
           iconColor="text-mp-ghost"
         />
       </div>
+
+      {/* ── Análise IA ───────────────────────────────────────────── */}
+      <AiInsight
+        endpoint="/api/ai/agua"
+        payload={{ periodoLabel, kpis, topCidades }}
+        mockText="Em **abril de 2026**, o MPPB registrou custo total de **R$ 18.574,64** com água e esgoto, com **variação de +13,9%** em relação ao mês anterior. O consumo atingiu **591 m³** (+9,6%), a um preço médio de **R$ 31,43/m³**, distribuídos em **39 matrículas ativas** junto à CAGEPA. **João Pessoa concentra 95% do total faturado** (R$ 17.704) — a alta expressiva no período recomenda verificação de consumo anômalo nas unidades da capital."
+      />
 
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar

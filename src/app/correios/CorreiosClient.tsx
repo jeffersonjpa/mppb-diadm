@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { Mail, TrendingUp, Activity } from 'lucide-react';
 
 import KpiCard       from '@/components/kpi/KpiCard';
+import AiInsight    from '@/components/ai/AiInsight';
 import FilterBar     from '@/components/filters/FilterBar';
 import SelectFilter  from '@/components/filters/SelectFilter';
 import ChartCard     from '@/components/charts/ChartCard';
@@ -201,6 +202,9 @@ export default function CorreiosClient() {
           subtitle={kpis.varPeso !== null ? 'vs mês anterior' : undefined}
         />
       </div>
+
+      {/* ── Análise IA ───────────────────────────────────────────── */}
+      <AiInsight mockText="Em **fevereiro de 2026**, as despesas com Correios totalizaram **R$ 3.894,83**, referentes a **152 objetos** com peso total de 5.221 g. O custo médio por objeto foi de **R$ 25,62**, com variação de +0,3% em relação a janeiro — **o módulo mantém-se estável**. **João Pessoa concentra 98% do volume** (149 objetos, R$ 3.823), com o Centro de Entrega de Malotes da capital respondendo pela quase totalidade das postagens." />
 
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar

@@ -20,9 +20,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = users.find(
-          (u) => u.email === (credentials.email as string)
-        );
+        const email = credentials.email as string;
+        if (!email.endsWith('@mppb.mp.br')) return null;
+
+        const user = users.find((u) => u.email === email);
         if (!user) return null;
 
         const valid = await bcrypt.compare(
@@ -31,7 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         );
         if (!valid) return null;
 
-        return { id: user.email, name: user.name, email: user.email, role: user.role };
+        return { id: email, name: user.name, email, role: user.role };
       },
     }),
   ],

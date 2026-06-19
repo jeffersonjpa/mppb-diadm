@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { Users, Package, Activity } from 'lucide-react';
 
 import KpiCard       from '@/components/kpi/KpiCard';
+import AiInsight    from '@/components/ai/AiInsight';
 import FilterBar     from '@/components/filters/FilterBar';
 import SelectFilter  from '@/components/filters/SelectFilter';
 import PeriodRange   from '@/components/filters/PeriodRange';
@@ -234,6 +235,9 @@ export default function TerceirizadosClient() {
           subtitle={kpis.varQuantidade !== null ? 'vs mês anterior' : undefined}
         />
       </div>
+
+      {/* ── Análise IA ───────────────────────────────────────────── */}
+      <AiInsight mockText="Em **fevereiro de 2026**, os contratos de terceirização do MPPB totalizaram **R$ 606.432,98**, com **alta de +6,1%** em relação ao mês anterior. Os **164 registros ativos** são liderados por Auxiliar de Serviços Gerais (67 contratos, R$ 223.584) e Auxiliar Administrativo (39 contratos, R$ 154.982). **João Pessoa concentra 45% da despesa total** (R$ 272.241 em 71 contratos), seguida por Campina Grande com 9% (R$ 52.444) — a variação de +6,1% recomenda revisão dos contratos vigentes." />
 
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar activeCount={activeCount} onClear={clearFilters}>

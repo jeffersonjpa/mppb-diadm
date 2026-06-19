@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import AiInsight from '@/components/ai/AiInsight';
 import {
   Users, Zap, Droplets, Mail, Phone, Fuel, Package,
   ArrowRight, TrendingUp,
@@ -176,6 +177,9 @@ export default function VisaoGeralPage() {
           </p>
         </div>
       </div>
+
+      {/* ── Análise IA ───────────────────────────────────────────── */}
+      <AiInsight mockText="No período monitorado, o MPPB registrou **gasto total de R$ 723.768,84** distribuídos entre **4 fontes de despesa ativas**. **Terceirizados representa 84% do total** com R$ 606.432,98 (**+6,1%** em fev/2026), seguido por Energia Elétrica com R$ 94.866,39 (+4,2%). **Destaque de atenção para Água e Esgoto**, que registrou a maior variação do período: **+13,9%** em abril de 2026 (R$ 18.574,64). Correios mantém-se estável em R$ 3.894,83 (+0,3%)." />
 
       {/* ── Grid de módulos ──────────────────────────────────────── */}
       <div>

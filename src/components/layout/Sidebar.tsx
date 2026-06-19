@@ -10,9 +10,6 @@ import {
   Zap,
   Droplets,
   Mail,
-  Phone,
-  Fuel,
-  Package,
   X,
   LogOut,
 } from 'lucide-react';
@@ -30,9 +27,6 @@ const NAV: NavItem[] = [
   { href: '/energia', label: 'Energia Elétrica', icon: Zap },
   { href: '/agua', label: 'Água e Esgoto', icon: Droplets },
   { href: '/correios', label: 'Correios', icon: Mail },
-  { href: '/telefonia', label: 'Telefonia', icon: Phone, soon: true },
-  { href: '/combustivel', label: 'Combustível e Frota', icon: Fuel, soon: true },
-  { href: '/material', label: 'Material de Consumo', icon: Package, soon: true },
 ];
 
 const ROLE_LABEL: Record<string, string> = {
