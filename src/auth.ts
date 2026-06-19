@@ -21,8 +21,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!credentials?.email || !credentials?.password) return null;
 
         const email = credentials.email as string;
-        if (!email.endsWith('@mppb.mp.br')) return null;
-
         const user = users.find((u) => u.email === email);
         if (!user) return null;
 
@@ -37,10 +35,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    signIn({ account, profile }) {
-      if (account?.provider === 'google') {
-        return !!profile?.email?.endsWith('@mppb.mp.br');
-      }
+    signIn() {
       return true;
     },
     jwt({ token, user }) {

@@ -19,16 +19,13 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex flex-col items-center gap-3 mb-8">
           <Image
-            src="/logoMPPB_color.png"
-            alt="MPPB"
-            width={180}
-            height={54}
-            className="h-[54px] w-auto object-contain"
+            src="/logotipo-diadm.png"
+            alt="DIADM"
+            width={260}
+            height={80}
+            className="h-[80px] w-auto object-contain"
             priority
           />
-          <p className="text-[13px] font-semibold text-mp-secondary tracking-tight">
-            BI Administrativo
-          </p>
         </div>
 
         {/* Botão Google */}
@@ -42,7 +39,7 @@ export default function LoginPage() {
             <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
             <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
           </svg>
-          Entrar com Google (@mppb.mp.br)
+          Entrar com Google
         </button>
 
         {/* Divisor */}
@@ -65,7 +62,7 @@ export default function LoginPage() {
               autoComplete="email"
               required
               className="rounded-[var(--radius-mp-input)] border border-mp-border px-3 py-2 text-[13px] text-mp-text placeholder:text-mp-ghost outline-none focus:border-mp-primary focus:ring-2 focus:ring-mp-primary/20 transition-colors"
-              placeholder="jefferson@mppb.mp.br"
+              placeholder="seu@email.com"
             />
           </div>
 

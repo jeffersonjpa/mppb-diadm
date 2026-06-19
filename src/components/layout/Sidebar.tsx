@@ -110,9 +110,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               className="h-[108px] w-auto object-contain"
               priority
             />
-            <p className="text-[11px] font-700 text-mp-ink leading-none tracking-tight px-1">
-              BI Administrativo
-            </p>
           </div>
 
           {/* Fechar (mobile) */}

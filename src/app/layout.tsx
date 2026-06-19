@@ -5,7 +5,7 @@ import Providers from '@/components/layout/Providers';
 import { auth } from '@/auth';
 
 export const metadata: Metadata = {
-  title: 'BI Administrativo — MPPB',
+  title: 'DIADM — MPPB',
   description: 'Painel de gestão de despesas administrativas do Ministério Público da Paraíba.',
 };
 

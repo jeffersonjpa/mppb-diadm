@@ -168,6 +168,12 @@ export default function TerceirizadosClient() {
     });
   }, [serie2026]);
 
+  // Top 5 cargos por custo (usado no payload da IA)
+  const topCargos = useMemo(
+    () => computeTopDimension(records, 'cargo', 5),
+    [records]
+  );
+
   // Subtítulo do período descritivo
   const periodoLabel = useMemo(() => {
     const parts = [
@@ -237,7 +243,10 @@ export default function TerceirizadosClient() {
       </div>
 
       {/* ── Análise IA ───────────────────────────────────────────── */}
-      <AiInsight mockText="Em **fevereiro de 2026**, os contratos de terceirização do MPPB totalizaram **R$ 606.432,98**, com **alta de +6,1%** em relação ao mês anterior. Os **164 registros ativos** são liderados por Auxiliar de Serviços Gerais (67 contratos, R$ 223.584) e Auxiliar Administrativo (39 contratos, R$ 154.982). **João Pessoa concentra 45% da despesa total** (R$ 272.241 em 71 contratos), seguida por Campina Grande com 9% (R$ 52.444) — a variação de +6,1% recomenda revisão dos contratos vigentes." />
+      <AiInsight
+        endpoint="/api/ai/terceirizados"
+        payload={{ periodoLabel, kpis, topCidades: topCargos }}
+      />
 
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar activeCount={activeCount} onClear={clearFilters}>

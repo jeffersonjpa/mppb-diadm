@@ -204,7 +204,10 @@ export default function CorreiosClient() {
       </div>
 
       {/* ── Análise IA ───────────────────────────────────────────── */}
-      <AiInsight mockText="Em **fevereiro de 2026**, as despesas com Correios totalizaram **R$ 3.894,83**, referentes a **152 objetos** com peso total de 5.221 g. O custo médio por objeto foi de **R$ 25,62**, com variação de +0,3% em relação a janeiro — **o módulo mantém-se estável**. **João Pessoa concentra 98% do volume** (149 objetos, R$ 3.823), com o Centro de Entrega de Malotes da capital respondendo pela quase totalidade das postagens." />
+      <AiInsight
+        endpoint="/api/ai/correios"
+        payload={{ periodoLabel, kpis, topCidades }}
+      />
 
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar

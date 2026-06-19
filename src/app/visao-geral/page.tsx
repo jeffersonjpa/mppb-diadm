@@ -144,7 +144,7 @@ export default function VisaoGeralPage() {
         />
 
         <p className="text-[12px] font-bold uppercase tracking-[1px] text-white/60 mb-3">
-          Ministério Público da Paraíba · BI Administrativo
+          Ministério Público da Paraíba
         </p>
 
         <div className="flex flex-wrap items-end gap-6">
@@ -179,7 +179,20 @@ export default function VisaoGeralPage() {
       </div>
 
       {/* ── Análise IA ───────────────────────────────────────────── */}
-      <AiInsight mockText="No período monitorado, o MPPB registrou **gasto total de R$ 723.768,84** distribuídos entre **4 fontes de despesa ativas**. **Terceirizados representa 84% do total** com R$ 606.432,98 (**+6,1%** em fev/2026), seguido por Energia Elétrica com R$ 94.866,39 (+4,2%). **Destaque de atenção para Água e Esgoto**, que registrou a maior variação do período: **+13,9%** em abril de 2026 (R$ 18.574,64). Correios mantém-se estável em R$ 3.894,83 (+0,3%)." />
+      <AiInsight
+        endpoint="/api/ai/visao-geral"
+        payload={{
+          periodoLabel: 'Fevereiro – Abril de 2026',
+          kpis: {
+            totalMonitorado,
+            modulosAtivos,
+            energia:       energiaResumo       ? { valor: energiaResumo.valor,       variacao: energiaResumo.variacao       } : null,
+            terceirizados: terceirizadosResumo ? { valor: terceirizadosResumo.valor, variacao: terceirizadosResumo.variacao } : null,
+            agua:          aguaResumo          ? { valor: aguaResumo.valor,          variacao: aguaResumo.variacao          } : null,
+            correios:      correiosResumo      ? { valor: correiosResumo.valor,      variacao: correiosResumo.variacao      } : null,
+          },
+        }}
+      />
 
       {/* ── Grid de módulos ──────────────────────────────────────── */}
       <div>

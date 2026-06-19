@@ -1,7 +1,7 @@
 import CorreiosClient from './CorreiosClient';
 
 export const metadata = {
-  title: 'Correios | BI Administrativo MPPB',
+  title: 'Correios | DIADM',
 };
 
 export default function CorreiosPage() {

@@ -247,7 +247,10 @@ export default function EnergiaClient() {
       </div>
 
       {/* ── Análise IA ───────────────────────────────────────────── */}
-      <AiInsight mockText="Em **fevereiro de 2026**, o gasto com energia elétrica totalizou **R$ 94.866,39**, com **alta de +4,2%** frente ao mês anterior. O consumo foi de **101.124 kWh** (+7,3%), a um custo médio de **R$ 0,9381/kWh**, distribuídos em **47 unidades consumidoras**. **João Pessoa responde por 63% da despesa** (R$ 59.580) e Campina Grande por 11% (R$ 10.714) — juntas concentram 74% do total faturado no período." />
+      <AiInsight
+        endpoint="/api/ai/energia"
+        payload={{ periodoLabel, kpis, topCidades }}
+      />
 
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar

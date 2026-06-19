@@ -27,7 +27,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
   const title =
     Object.entries(PAGE_TITLES).find(([key]) =>
       pathname === key || pathname.startsWith(key + '/')
-    )?.[1] ?? 'BI Administrativo';
+    )?.[1] ?? 'DIADM';
 
   return (
     <header
