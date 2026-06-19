@@ -53,8 +53,13 @@ export default function AiInsight({ endpoint, payload, mockText }: AiInsightProp
       headers: { 'Content-Type': 'application/json' },
       body: payloadKey,
     })
-      .then(r => r.json())
-      .then(data => { if (!cancelled) setText(data.text ?? ''); })
+      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+      .then(data => {
+        if (!cancelled) {
+          if (data.text) setText(data.text);
+          else setError(true);
+        }
+      })
       .catch(() => { if (!cancelled) setError(true); })
       .finally(() => { if (!cancelled) setLoading(false); });
 
