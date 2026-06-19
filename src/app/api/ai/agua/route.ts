@@ -24,7 +24,7 @@ interface AguaAiPayload {
 
 function buildCacheKey(payload: AguaAiPayload): string {
   const normalized = JSON.stringify({
-    _v: 2,
+    _v: 3,
     p: payload.periodoLabel,
     v: Math.round(payload.kpis.valorTotal),
     c: Math.round(payload.kpis.consumo),
@@ -44,16 +44,12 @@ function buildPrompt(payload: AguaAiPayload): string {
     .join('; ');
 
   return `
-Você é um analista de dados do Ministério Público da Paraíba (MPPB) especializado em gestão de recursos hídricos e saneamento em órgãos públicos.
-Escreva em português, em linguagem objetiva e técnica, sem bullet points e sem mencionar "análise" ou "relatório".
-Use **negrito** (markdown) para destacar valores, variações expressivas e termos-chave.
+Você é um analista de dados do Ministério Público da Paraíba (MPPB) analisando gastos com água e saneamento.
+Gere um parágrafo curto (2-3 frases) em português, em linguagem objetiva e técnica, resumindo os dados a seguir.
+Não use bullet points. Não mencione "análise" ou "relatório". Comece diretamente pelos números e contexto.
+Use **negrito** (markdown) para destacar valores e pontos de atenção.
 
-Estruture a resposta em exatamente três parágrafos curtos:
-1. **Situação atual** (2 frases): resuma custo total, consumo em m³, preço médio por m³ e as cidades de maior gasto.
-2. **Tendência e projeção** (1-2 frases): com base nas variações de custo e consumo, indique a tendência e estime o impacto provável no próximo mês caso o padrão se mantenha; destaque se o aumento de custo é explicado por consumo ou por tarifa.
-3. **Recomendações** (2 frases): sugira ações concretas para um órgão público — ex.: auditoria de matrículas inativas, programa de combate a desperdícios, revisão de tarifas junto à CAGEPA, instalação de hidrômetros por setor.
-
-Dados do período ${periodoLabel}:
+Período: ${periodoLabel}
 Custo total: R$ ${kpis.valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (variação vs mês anterior: ${varValorStr})
 Consumo total: ${kpis.consumo.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} m³ (variação: ${varConsumoStr})
 Preço médio: R$ ${kpis.precoMedio.toFixed(2)}/m³
@@ -94,7 +90,7 @@ export async function POST(req: NextRequest) {
     const completion = await client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: buildPrompt(payload) }],
-      max_tokens: 420,
+      max_tokens: 180,
       temperature: 0.4,
     });
 

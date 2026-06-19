@@ -24,7 +24,7 @@ interface EnergiaAiPayload {
 
 function buildCacheKey(payload: EnergiaAiPayload): string {
   const normalized = JSON.stringify({
-    _v: 2,
+    _v: 3,
     p: payload.periodoLabel,
     v: Math.round(payload.kpis.valorTotal),
     k: Math.round(payload.kpis.kwh),
@@ -43,16 +43,12 @@ function buildPrompt(payload: EnergiaAiPayload): string {
     .join('; ');
 
   return `
-Você é um analista de dados do Ministério Público da Paraíba (MPPB) especializado em eficiência energética e gestão de despesas.
-Escreva em português, em linguagem objetiva e técnica, sem bullet points e sem mencionar "análise" ou "relatório".
-Use **negrito** (markdown) para destacar valores, variações expressivas e termos-chave.
+Você é um analista de dados do Ministério Público da Paraíba (MPPB) analisando gastos com energia elétrica.
+Gere um parágrafo curto (2-3 frases) em português, em linguagem objetiva e técnica, resumindo os dados a seguir.
+Não use bullet points. Não mencione "análise" ou "relatório". Comece diretamente pelos números e contexto.
+Use **negrito** (markdown) para destacar valores e pontos de atenção.
 
-Estruture a resposta em exatamente três parágrafos curtos:
-1. **Situação atual** (2 frases): resuma os principais números do período, destacando o custo total, o consumo em kWh, o custo médio e as cidades de maior gasto.
-2. **Tendência e projeção** (1-2 frases): com base na variação percentual observada, indique a tendência (alta, queda ou estabilidade) e estime o impacto provável no próximo mês caso o padrão se mantenha.
-3. **Recomendações** (2 frases): sugira ações concretas e aplicáveis a um órgão público para mitigar gastos excessivos ou aproveitar a tendência favorável — ex.: auditoria de UCs, negociação tarifária, programa de eficiência energética, revisão de contratos.
-
-Dados do período ${periodoLabel}:
+Período: ${periodoLabel}
 Custo total: R$ ${kpis.valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (variação vs mês anterior: ${varValorStr})
 Consumo total: ${kpis.kwh.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} kWh (variação: ${varKwhStr})
 Custo médio: R$ ${kpis.custoPorKwh.toFixed(4)}/kWh
@@ -93,7 +89,7 @@ export async function POST(req: NextRequest) {
     const completion = await client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: buildPrompt(payload) }],
-      max_tokens: 420,
+      max_tokens: 180,
       temperature: 0.4,
     });
 

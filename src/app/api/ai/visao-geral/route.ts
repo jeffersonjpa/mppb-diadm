@@ -28,7 +28,7 @@ interface VisaoGeralAiPayload {
 function buildCacheKey(payload: VisaoGeralAiPayload): string {
   const { kpis } = payload;
   const normalized = JSON.stringify({
-    _v: 2,
+    _v: 3,
     p: payload.periodoLabel,
     t: Math.round(kpis.totalMonitorado),
     e: kpis.energia ? Math.round(kpis.energia.valor) : null,
@@ -59,14 +59,10 @@ function buildPrompt(payload: VisaoGeralAiPayload): string {
   ].filter(Boolean).join('\n- ');
 
   return `
-Você é um analista de dados do Ministério Público da Paraíba (MPPB) especializado em gestão estratégica de despesas administrativas públicas.
-Escreva em português, em linguagem objetiva e técnica, sem bullet points e sem mencionar "análise" ou "relatório".
-Use **negrito** (markdown) para destacar valores totais, variações expressivas e termos-chave.
-
-Estruture a resposta em exatamente três parágrafos curtos:
-1. **Situação atual** (2 frases): resuma o total monitorado e destaque os módulos com maiores despesas e variações mais expressivas.
-2. **Tendência e projeção** (1-2 frases): com base nas variações percentuais dos módulos, projete o comportamento do gasto consolidado no próximo mês; identifique quais módulos representam maior risco de escalada de custos.
-3. **Recomendações** (2 frases): sugira prioridades de ação para a gestão administrativa — ex.: qual módulo merece atenção imediata, possíveis revisões contratuais, ações de eficiência, ou monitoramento de alertas.
+Você é um analista de dados do Ministério Público da Paraíba (MPPB) analisando o painel consolidado de despesas administrativas.
+Gere um parágrafo curto (2-3 frases) em português, em linguagem objetiva e técnica, com visão geral dos módulos monitorados.
+Não use bullet points. Não mencione "análise" ou "relatório". Comece diretamente pelos números.
+Use **negrito** (markdown) para destacar valores totais, variações expressivas e pontos de atenção.
 
 Período de referência: ${periodoLabel}
 Total consolidado monitorado: ${fmtBRL(kpis.totalMonitorado)}
@@ -109,7 +105,7 @@ export async function POST(req: NextRequest) {
     const completion = await client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: buildPrompt(payload) }],
-      max_tokens: 450,
+      max_tokens: 200,
       temperature: 0.4,
     });
 
