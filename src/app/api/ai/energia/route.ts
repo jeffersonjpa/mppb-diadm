@@ -85,7 +85,9 @@ export async function POST(req: NextRequest) {
     const cached = readCache(key);
     if (cached) return NextResponse.json({ text: cached, cached: true });
 
-    const client = new OpenAI({ apiKey: process.env.GPT_API_KEY });
+    const apiKey = process.env.GPT_API_KEY;
+    if (!apiKey) return NextResponse.json({ error: "GPT_API_KEY not set" }, { status: 500 });
+    const client = new OpenAI({ apiKey });
     const completion = await client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: buildPrompt(payload) }],
