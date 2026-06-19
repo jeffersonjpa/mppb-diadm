@@ -2,14 +2,14 @@ import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
-import type { NextAuthConfig } from 'next-auth';
+import { authConfig } from '@/auth.config';
 import type { LocalUser, UserRole } from '@/types/auth';
 import usersData from '@/data/users.json';
 
 const users = usersData as LocalUser[];
 
-export const authConfig: NextAuthConfig = {
-  trustHost: true,
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     Google,
     Credentials({
@@ -35,8 +35,13 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-
   callbacks: {
+    signIn({ account, profile }) {
+      if (account?.provider === 'google') {
+        return !!profile?.email?.endsWith('@mppb.mp.br');
+      }
+      return true;
+    },
     jwt({ token, user }) {
       if (user) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,14 +49,12 @@ export const authConfig: NextAuthConfig = {
         if (role) {
           token.role = role;
         } else {
-          // Usuário Google: buscar role no arquivo local pelo email
           const local = users.find((u) => u.email === token.email);
           token.role = local?.role ?? 'consulta';
         }
       }
       return token;
     },
-
     session({ session, token }) {
       if (session.user) {
         session.user.role = (token.role as UserRole) ?? 'consulta';
@@ -59,10 +62,4 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
   },
-
-  pages: {
-    signIn: '/login',
-  },
-};
-
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+});
