@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.env*
+ai-cache
+
+# arquivos de desenvolvimento
+screenshot-*.png
+screenshot.mjs
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# documentação e ferramentas locais
+README.md
+CLAUDE.md
+AGENTS.md
+scripts/
