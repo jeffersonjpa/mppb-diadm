@@ -120,8 +120,8 @@ const serieMensal = Object.values(porMesAno)
     valorTotal: +s.valorTotal.toFixed(2)
   }));
 
-// Filtrar registros de 2025 e 2026 para exibição em tabelas
-const ANOS_TABELA = [2025, 2026];
+// Filtrar registros de 2022 a 2026 para exibição em tabelas e filtros
+const ANOS_TABELA = [2022, 2023, 2024, 2025, 2026];
 const registros = allRecords
   .filter(r => ANOS_TABELA.includes(r.ano))
   .map(r => ({
@@ -151,6 +151,6 @@ const out = {
 fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
 fs.writeFileSync(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
 
-console.log(`✓ ${registros.length} registros de água processados (2025-2026).`);
+console.log(`✓ ${registros.length} registros de água processados (2022-2026).`);
 console.log(`  Série mensal: ${serieMensal.length} meses.`);
 console.log(`  Salvo em: ${OUT_PATH}`);

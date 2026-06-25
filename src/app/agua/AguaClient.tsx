@@ -16,13 +16,21 @@ import {
   getRegistros, getSerieMensal, getMesesPorAno,
   CIDADES, ANOS,
 } from '@/lib/api/agua';
-import { computeKpis, computeTopCidades, formatSerieForChart } from '@/features/agua/selectors';
+import { computeKpis, computeTopCidades, computeTopUnidades, formatSerieForChart } from '@/features/agua/selectors';
 import { formatBRL, MESES_SHORT, MESES_FULL } from '@/lib/format';
 import type { AguaRecord, AguaFilters } from '@/features/agua/types';
 
 /* ── Defaults ──────────────────────────────────────────────────── */
 const DEFAULT_ANO = Math.max(...ANOS);
 const DEFAULT_MES = Math.max(...getMesesPorAno(DEFAULT_ANO));
+
+type Metrica = 'valor' | 'consumo';
+const TOP_N_OPTIONS = [
+  { value: 10,  label: 'Top 10'  },
+  { value: 15,  label: 'Top 15'  },
+  { value: 20,  label: 'Top 20'  },
+  { value: 9999, label: 'Todas'  },
+];
 
 /* ── Colunas da tabela ─────────────────────────────────────────── */
 const COLUMNS: Column<AguaRecord>[] = [
@@ -54,6 +62,12 @@ export default function AguaClient() {
     mes: DEFAULT_MES,
     cidade: null,
   });
+
+  /* ── Estado do painel de unidades ─────────────────────────────── */
+  const [uAno,     setUAno]     = useState<number | null>(DEFAULT_ANO);
+  const [uMes,     setUMes]     = useState<number | null>(null);
+  const [uMetrica, setUMetrica] = useState<Metrica>('valor');
+  const [uTopN,    setUTopN]    = useState<number>(15);
 
   const mesesDisponiveis = useMemo(
     () => filters.ano != null ? getMesesPorAno(filters.ano) : [],
@@ -115,23 +129,42 @@ export default function AguaClient() {
     [records]
   );
 
-  const serie = useMemo(() => getSerieMensal([2024, 2025, 2026]), []);
+  /* ── Dados do painel de unidades ──────────────────────────────── */
+  const uMesesDisponiveis = useMemo(
+    () => uAno != null ? getMesesPorAno(uAno) : [],
+    [uAno]
+  );
+
+  const uRecords = useMemo(
+    () => getRegistros({ ano: uAno, mes: uMes, cidade: null }),
+    [uAno, uMes]
+  );
+
+  const topUnidades = useMemo(() => {
+    const raw = computeTopUnidades(uRecords, uTopN);
+    return raw.map(d => ({
+      label: d.unidade,
+      value: uMetrica === 'valor' ? d.valorTotal : d.consumo,
+    }));
+  }, [uRecords, uTopN, uMetrica]);
+
+  const serie = useMemo(() => getSerieMensal([2022, 2023, 2024, 2025, 2026]), []);
+  const serie2022 = useMemo(() => formatSerieForChart(serie, 2022), [serie]);
+  const serie2023 = useMemo(() => formatSerieForChart(serie, 2023), [serie]);
   const serie2024 = useMemo(() => formatSerieForChart(serie, 2024), [serie]);
   const serie2025 = useMemo(() => formatSerieForChart(serie, 2025), [serie]);
   const serie2026 = useMemo(() => formatSerieForChart(serie, 2026), [serie]);
 
-  const lastMes2026 = serie2026.length > 0 ? Math.max(...serie2026.map(s => s.mes)) : 0;
-  const allMonths = [...new Set([...serie2025, ...serie2026].map(s => s.mes))]
-    .sort((a, b) => a - b)
-    .filter(m => m <= Math.max(12, lastMes2026));
+  const allMonths = [...new Set([
+    ...serie2022, ...serie2023, ...serie2024, ...serie2025, ...serie2026,
+  ].map(s => s.mes))].sort((a, b) => a - b);
 
   const lineLabels = allMonths.map(m => MESES_SHORT[m - 1]);
+  const line2022   = allMonths.map(m => serie2022.find(s => s.mes === m)?.valor ?? null);
+  const line2023   = allMonths.map(m => serie2023.find(s => s.mes === m)?.valor ?? null);
   const line2024   = allMonths.map(m => serie2024.find(s => s.mes === m)?.valor ?? null);
   const line2025   = allMonths.map(m => serie2025.find(s => s.mes === m)?.valor ?? null);
-  const line2026   = allMonths.map(m => {
-    const found = serie2026.find(s => s.mes === m);
-    return found ? found.valor : null;
-  });
+  const line2026   = allMonths.map(m => serie2026.find(s => s.mes === m)?.valor ?? null);
 
   const periodoLabel = [
     filters.ano   ? String(filters.ano)                  : 'Todos os anos',
@@ -242,14 +275,16 @@ export default function AguaClient() {
 
         <ChartCard
           title="Evolução Mensal de Custo"
-          subtitle="Comparativo 2024 × 2025 × 2026 (R$)"
+          subtitle="Comparativo 2022 × 2023 × 2024 × 2025 × 2026 (R$)"
           minHeight={280}
         >
           <MonthlyLine
             labels={lineLabels}
             series={[
-              { name: '2024', data: line2024, color: '#D0D5DD' },
-              { name: '2025', data: line2025, color: '#A6AEBA' },
+              { name: '2022', data: line2022, color: '#E4E7EB' },
+              { name: '2023', data: line2023, color: '#CBD2DA' },
+              { name: '2024', data: line2024, color: '#A6AEBA' },
+              { name: '2025', data: line2025, color: '#6B7B8D' },
               { name: '2026', data: line2026, color: '#1D5288' },
             ]}
             height={280}
@@ -267,6 +302,59 @@ export default function AguaClient() {
           />
         </ChartCard>
       </div>
+
+      {/* ── Painel de Unidades ───────────────────────────────────── */}
+      <ChartCard
+        title="Consumo por Unidade"
+        subtitle={`Ranking de unidades · ${uMetrica === 'valor' ? 'Custo (R$)' : 'Consumo (m³)'}`}
+        minHeight={Math.max(320, topUnidades.length * 34)}
+      >
+        {/* Filtros do painel */}
+        <div className="flex flex-wrap gap-2 mb-3">
+          <SelectFilter
+            label="Ano"
+            value={uAno}
+            options={ANOS.map(a => ({ value: a, label: String(a) }))}
+            onChange={v => {
+              const newAno = v ? parseInt(v) : null;
+              setUAno(newAno);
+              setUMes(null);
+            }}
+            placeholder="Todos"
+          />
+          <SelectFilter
+            label="Mês"
+            value={uMes}
+            options={uMesesDisponiveis.map(m => ({ value: m, label: MESES_FULL[m - 1] }))}
+            onChange={v => setUMes(v ? parseInt(v) : null)}
+            placeholder="Todos"
+          />
+          <SelectFilter
+            label="Métrica"
+            value={uMetrica}
+            options={[
+              { value: 'valor',   label: 'Custo (R$)'    },
+              { value: 'consumo', label: 'Consumo (m³)'  },
+            ]}
+            onChange={v => setUMetrica((v ?? 'valor') as Metrica)}
+            placeholder=""
+          />
+          <SelectFilter
+            label="Exibir"
+            value={uTopN}
+            options={TOP_N_OPTIONS}
+            onChange={v => setUTopN(v ? parseInt(v) : 15)}
+            placeholder=""
+          />
+        </div>
+        <BarByDimension
+          data={topUnidades}
+          valueLabel={uMetrica === 'valor' ? 'Custo (R$)' : 'Consumo (m³)'}
+          unit={uMetrica === 'valor' ? 'brl' : 'm3'}
+          color={uMetrica === 'valor' ? '#1D5288' : '#2E7D32'}
+          height={Math.max(320, topUnidades.length * 34)}
+        />
+      </ChartCard>
 
       {/* ── Tabela detalhada ─────────────────────────────────────── */}
       <DataTable<AguaRecord>

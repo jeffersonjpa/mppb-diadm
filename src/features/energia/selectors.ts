@@ -1,4 +1,4 @@
-import type { EnergiaRecord, EnergiaKpis, CidadeSummary, SerieItem } from './types';
+import type { EnergiaRecord, EnergiaKpis, CidadeSummary, UnidadeSummary, SerieItem } from './types';
 
 export function computeKpis(
   records: EnergiaRecord[],
@@ -20,9 +20,9 @@ export function computeKpis(
   const varCusto  = prevCusto > 0 ? (currentCusto - prevCusto) / prevCusto * 100 : null;
 
   return {
-    valorTotal: round2(valorTotal),
-    kwh:        round2(kwh),
-    custoPorKwh: round4(custoPorKwh),
+    valorTotal,
+    kwh,
+    custoPorKwh,
     ucs,
     varValor:   varValor  != null ? round1(varValor)  : null,
     varKwh:     varKwh    != null ? round1(varKwh)    : null,
@@ -39,17 +39,26 @@ export function computeTopCidades(records: EnergiaRecord[], limit = 12): CidadeS
   }
   return [...map.values()]
     .sort((a, b) => b.valorTotal - a.valorTotal)
-    .slice(0, limit)
-    .map(d => ({ ...d, kwh: round2(d.kwh), valorTotal: round2(d.valorTotal) }));
+    .slice(0, limit);
+}
+
+export function computeTopUnidades(records: EnergiaRecord[], limit = 20): UnidadeSummary[] {
+  const map = new Map<string, UnidadeSummary>();
+  for (const r of records) {
+    const e = map.get(r.unidade);
+    if (e) { e.kwh += r.kwh; e.valorTotal += r.valorTotal; e.registros++; }
+    else    map.set(r.unidade, { unidade: r.unidade, kwh: r.kwh, valorTotal: r.valorTotal, registros: 1 });
+  }
+  return [...map.values()]
+    .sort((a, b) => b.valorTotal - a.valorTotal)
+    .slice(0, limit);
 }
 
 export function formatSerieForChart(serie: SerieItem[], ano: number): { mes: number; valor: number; kwh: number }[] {
   return serie
     .filter(s => s.ano === ano)
     .sort((a, b) => a.mes - b.mes)
-    .map(s => ({ mes: s.mes, valor: round2(s.valorTotal), kwh: round2(s.kwh) }));
+    .map(s => ({ mes: s.mes, valor: s.valorTotal, kwh: s.kwh }));
 }
 
 function round1(n: number) { return Math.round(n * 10) / 10; }
-function round2(n: number) { return Math.round(n * 100) / 100; }
-function round4(n: number) { return Math.round(n * 10000) / 10000; }

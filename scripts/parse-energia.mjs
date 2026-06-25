@@ -85,23 +85,22 @@ for (const r of allRecords) {
   porMesAno[key].registros  += 1;
 }
 const serieMensal = Object.values(porMesAno)
-  .sort((a, b) => a.ano !== b.ano ? a.ano - b.ano : a.mes - b.mes)
-  .map(s => ({ ...s, kwh: +s.kwh.toFixed(2), valorTotal: +s.valorTotal.toFixed(2) }));
+  .sort((a, b) => a.ano !== b.ano ? a.ano - b.ano : a.mes - b.mes);
 
-// Registros 2025 e 2026 (para tabela e filtros)
-const ANOS_TABELA = [2025, 2026];
+// Registros 2022 a 2026 (para tabela e filtros)
+const ANOS_TABELA = [2022, 2023, 2024, 2025, 2026];
 const registros = allRecords
   .filter(r => ANOS_TABELA.includes(r.ano))
   .map(r => ({
     ...r,
-    kwh:          +r.kwh.toFixed(3),
-    valorTotal:   +r.valorTotal.toFixed(2),
-    valorLiquido: +r.valorLiquido.toFixed(2),
-    valorICMS:    +r.valorICMS.toFixed(2),
-    valorILP:     +r.valorILP.toFixed(2),
-    valorOutros:  +r.valorOutros.toFixed(2),
-    valorMulta:   +r.valorMulta.toFixed(2),
-    valorJuros:   +r.valorJuros.toFixed(2),
+    kwh:          r.kwh,
+    valorTotal:   r.valorTotal,
+    valorLiquido: r.valorLiquido,
+    valorICMS:    r.valorICMS,
+    valorILP:     r.valorILP,
+    valorOutros:  r.valorOutros,
+    valorMulta:   r.valorMulta,
+    valorJuros:   r.valorJuros,
   }));
 
 // Meses disponíveis por ano
@@ -128,10 +127,10 @@ const out = {
 fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
 fs.writeFileSync(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
 
-const n2025 = registros.filter(r => r.ano === 2025).length;
-const n2026 = registros.filter(r => r.ano === 2026).length;
-console.log(`✓ ${registros.length} registros (${n2025} em 2025, ${n2026} em 2026)`);
+for (const ano of ANOS_TABELA) {
+  const n = registros.filter(r => r.ano === ano).length;
+  console.log(`  ${n} registros em ${ano}`);
+}
+console.log(`✓ ${registros.length} registros total`);
 console.log(`  ${serieMensal.length} meses históricos | ${cidades.length} cidades`);
-console.log(`  Meses 2025: ${mesesPorAno[2025]?.join(', ')}`);
-console.log(`  Meses 2026: ${mesesPorAno[2026]?.join(', ')}`);
 console.log(`  Salvo em: ${OUT_PATH}`);

@@ -1,7 +1,7 @@
 'use client';
 
 import ReactECharts from 'echarts-for-react';
-import { formatBRLShort } from '@/lib/format';
+import { formatBRL, formatBRLShort, formatKwh } from '@/lib/format';
 
 interface Series {
   name:   string;
@@ -24,9 +24,13 @@ export default function MonthlyLine({
   unit = 'brl',
   onSeriesClick,
 }: MonthlyLineProps) {
-  const formatter = unit === 'brl'
+  const axisFormatter = unit === 'brl'
     ? (v: number) => formatBRLShort(v)
     : (v: number) => `${(v / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}k kWh`;
+
+  const tooltipFormatter = unit === 'brl'
+    ? (v: number) => formatBRL(v)
+    : (v: number) => formatKwh(v);
 
   const option = {
     tooltip: {
@@ -38,7 +42,7 @@ export default function MonthlyLine({
       formatter: (params: { seriesName: string; value: number | null; marker: string }[]) =>
         params
           .filter(p => p.value != null)
-          .map(p => `${p.marker} ${p.seriesName}: <b>${formatter(p.value as number)}</b>`)
+          .map(p => `${p.marker} ${p.seriesName}: <b>${tooltipFormatter(p.value as number)}</b>`)
           .join('<br/>'),
     },
     legend: {
@@ -60,7 +64,7 @@ export default function MonthlyLine({
       type: 'value',
       axisLine: { show: false },
       axisTick: { show: false },
-      axisLabel: { color: '#6B7480', fontSize: 10, formatter },
+      axisLabel: { color: '#6B7480', fontSize: 10, formatter: axisFormatter },
       splitLine: { lineStyle: { color: '#ECEEF1', type: 'dashed' } },
     },
     series: series.map(s => ({

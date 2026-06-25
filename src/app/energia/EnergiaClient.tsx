@@ -14,9 +14,9 @@ import DataTable, { type Column } from '@/components/table/DataTable';
 
 import {
   getRegistros, getSerieMensal, getMesesPorAno,
-  CIDADES, ANOS,
+  CIDADES, ANOS, UNIDADES,
 } from '@/lib/api/energia';
-import { computeKpis, computeTopCidades, formatSerieForChart } from '@/features/energia/selectors';
+import { computeKpis, computeTopCidades, computeTopUnidades, formatSerieForChart } from '@/features/energia/selectors';
 import { formatBRL, formatKwh, MESES_SHORT, MESES_FULL } from '@/lib/format';
 import type { EnergiaRecord, EnergiaFilters } from '@/features/energia/types';
 
@@ -100,9 +100,10 @@ const COLUMNS: Column<EnergiaRecord>[] = [
 /* ── Componente principal ──────────────────────────────────────── */
 export default function EnergiaClient() {
   const [filters, setFilters] = useState<EnergiaFilters>({
-    ano: DEFAULT_ANO,
-    mes: DEFAULT_MES,
-    cidade: null,
+    ano:     DEFAULT_ANO,
+    mes:     DEFAULT_MES,
+    cidade:  null,
+    unidade: null,
   });
 
   // Opções de mês dependem do ano selecionado
@@ -111,15 +112,17 @@ export default function EnergiaClient() {
     [filters.ano]
   );
 
-  const ANOS_OPTIONS   = ANOS.map(a => ({ value: a, label: String(a) }));
-  const MESES_OPTIONS  = mesesDisponiveis.map(m => ({ value: m, label: MESES_FULL[m - 1] }));
-  const CIDADE_OPTIONS = CIDADES.map(c => ({ value: c, label: c }));
+  const ANOS_OPTIONS    = ANOS.map(a => ({ value: a, label: String(a) }));
+  const MESES_OPTIONS   = mesesDisponiveis.map(m => ({ value: m, label: MESES_FULL[m - 1] }));
+  const CIDADE_OPTIONS  = CIDADES.map(c => ({ value: c, label: c }));
+  const UNIDADE_OPTIONS = UNIDADES.map(u => ({ value: u, label: u }));
 
   // Conta quantos filtros estão fora do padrão
   const activeCount =
-    (filters.ano    != null ? 1 : 0) +
-    (filters.mes    != null ? 1 : 0) +
-    (filters.cidade != null ? 1 : 0);
+    (filters.ano     != null ? 1 : 0) +
+    (filters.mes     != null ? 1 : 0) +
+    (filters.cidade  != null ? 1 : 0) +
+    (filters.unidade != null ? 1 : 0);
 
   /* Dados filtrados */
   const records = useMemo(() => getRegistros(filters), [filters]);
@@ -166,31 +169,37 @@ export default function EnergiaClient() {
     }
   }, [records, latestAndPrev, filters.ano, filters.mes]);
 
-  /* Gráfico de barras */
+  /* Gráfico de barras — cidades */
   const topCidades = useMemo(
     () => computeTopCidades(records, 12).map(d => ({ label: d.cidade, value: d.valorTotal })),
     [records]
   );
 
-  /* Série histórica (2024, 2025, 2026) */
-  const serie = useMemo(() => getSerieMensal([2024, 2025, 2026]), []);
+  /* Gráfico de barras — unidades */
+  const topUnidades = useMemo(
+    () => computeTopUnidades(records, 20).map(d => ({ label: d.unidade, value: d.valorTotal })),
+    [records]
+  );
+
+  /* Série histórica (2022–2026) */
+  const serie = useMemo(() => getSerieMensal([2022, 2023, 2024, 2025, 2026]), []);
+  const serie2022 = useMemo(() => formatSerieForChart(serie, 2022), [serie]);
+  const serie2023 = useMemo(() => formatSerieForChart(serie, 2023), [serie]);
   const serie2024 = useMemo(() => formatSerieForChart(serie, 2024), [serie]);
   const serie2025 = useMemo(() => formatSerieForChart(serie, 2025), [serie]);
   const serie2026 = useMemo(() => formatSerieForChart(serie, 2026), [serie]);
 
-  // Limitar a meses com dado em pelo menos uma série
-  const lastMes2026 = serie2026.length > 0 ? Math.max(...serie2026.map(s => s.mes)) : 0;
-  const allMonths = [...new Set([...serie2025, ...serie2026].map(s => s.mes))]
-    .sort((a, b) => a - b)
+  // Todos os 12 meses, limitando pelo último mês com dado em 2026
+  const lastMes2026 = serie2026.length > 0 ? Math.max(...serie2026.map(s => s.mes)) : 12;
+  const allMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     .filter(m => m <= Math.max(12, lastMes2026));
 
   const lineLabels = allMonths.map(m => MESES_SHORT[m - 1]);
+  const line2022   = allMonths.map(m => serie2022.find(s => s.mes === m)?.valor ?? null);
+  const line2023   = allMonths.map(m => serie2023.find(s => s.mes === m)?.valor ?? null);
   const line2024   = allMonths.map(m => serie2024.find(s => s.mes === m)?.valor ?? null);
   const line2025   = allMonths.map(m => serie2025.find(s => s.mes === m)?.valor ?? null);
-  const line2026   = allMonths.map(m => {
-    const found = serie2026.find(s => s.mes === m);
-    return found ? found.valor : null;
-  });
+  const line2026   = allMonths.map(m => serie2026.find(s => s.mes === m)?.valor ?? null);
 
   /* Subtítulo do período */
   const periodoLabel = [
@@ -255,7 +264,7 @@ export default function EnergiaClient() {
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar
         activeCount={activeCount}
-        onClear={() => setFilters({ ano: null, mes: null, cidade: null })}
+        onClear={() => setFilters({ ano: null, mes: null, cidade: null, unidade: null })}
       >
         <SelectFilter
           label="Ano"
@@ -278,6 +287,13 @@ export default function EnergiaClient() {
           onChange={v => setFilters(f => ({ ...f, cidade: v }))}
           placeholder="Todas"
         />
+        <SelectFilter
+          label="Unidade"
+          value={filters.unidade}
+          options={UNIDADE_OPTIONS}
+          onChange={v => setFilters(f => ({ ...f, unidade: v }))}
+          placeholder="Todas"
+        />
       </FilterBar>
 
       {/* ── Gráficos ─────────────────────────────────────────────── */}
@@ -296,14 +312,16 @@ export default function EnergiaClient() {
 
         <ChartCard
           title="Evolução Mensal de Custo"
-          subtitle="Comparativo 2024 × 2025 × 2026 (R$)"
+          subtitle="Comparativo 2022 × 2023 × 2024 × 2025 × 2026 (R$)"
           minHeight={280}
         >
           <MonthlyLine
             labels={lineLabels}
             series={[
-              { name: '2024', data: line2024, color: '#D0D5DD' },
-              { name: '2025', data: line2025, color: '#A6AEBA' },
+              { name: '2022', data: line2022, color: '#E4E7EC' },
+              { name: '2023', data: line2023, color: '#C8CDD6' },
+              { name: '2024', data: line2024, color: '#98A2B3' },
+              { name: '2025', data: line2025, color: '#4A7BB7' },
               { name: '2026', data: line2026, color: '#1D5288' },
             ]}
             height={280}
@@ -321,6 +339,20 @@ export default function EnergiaClient() {
           />
         </ChartCard>
       </div>
+
+      {/* ── Gráfico Top Unidades ──────────────────────────────────── */}
+      <ChartCard
+        title="Top 20 Unidades por Custo"
+        subtitle={`Valor Total (R$) · ${periodoLabel}`}
+        minHeight={Math.max(400, topUnidades.length * 34)}
+      >
+        <BarByDimension
+          data={topUnidades}
+          height={Math.max(400, topUnidades.length * 34)}
+          color="#2E6DB4"
+          onBarClick={unidade => setFilters(f => ({ ...f, unidade }))}
+        />
+      </ChartCard>
 
       {/* ── Tabela detalhada ─────────────────────────────────────── */}
       <DataTable<EnergiaRecord>

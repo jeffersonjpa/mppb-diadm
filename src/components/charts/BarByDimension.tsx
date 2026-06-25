@@ -2,7 +2,7 @@
 
 import ReactECharts from 'echarts-for-react';
 import { mppbTheme } from '@/lib/echarts/theme';
-import { formatBRLShort } from '@/lib/format';
+import { formatBRL, formatBRLShort } from '@/lib/format';
 
 interface BarItem {
   label: string;
@@ -14,6 +14,7 @@ interface BarByDimensionProps {
   valueLabel?: string;
   height?:     number;
   color?:      string;
+  unit?:       'brl' | 'm3';
   onBarClick?: (label: string) => void;
 }
 
@@ -22,8 +23,15 @@ export default function BarByDimension({
   valueLabel = 'Valor (R$)',
   height = 320,
   color = '#1D5288',
+  unit = 'brl',
   onBarClick,
 }: BarByDimensionProps) {
+  const fmt      = unit === 'm3'
+    ? (v: number) => v.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + ' m³'
+    : formatBRL;
+  const fmtShort = unit === 'm3'
+    ? (v: number) => (v >= 1000 ? (v / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'k m³' : v.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + ' m³')
+    : formatBRLShort;
   // Ordena crescente p/ barras horizontais (ECharts exibe de baixo p/ cima)
   const sorted = [...data].sort((a, b) => a.value - b.value);
 
@@ -35,7 +43,7 @@ export default function BarByDimension({
       axisPointer: { type: 'shadow' },
       formatter: (params: { name: string; value: number }[]) => {
         const p = params[0];
-        return `<b>${p.name}</b><br/>${formatBRLShort(p.value)}`;
+        return `<b>${p.name}</b><br/>${fmt(p.value)}`;
       },
     },
     grid: { top: 8, right: 80, bottom: 8, left: 8, containLabel: true },
@@ -44,7 +52,7 @@ export default function BarByDimension({
       axisLabel: {
         color: '#6B7480',
         fontSize: 10,
-        formatter: (v: number) => formatBRLShort(v),
+        formatter: (v: number) => fmtShort(v),
       },
       splitLine: { lineStyle: { color: '#ECEEF1', type: 'dashed' } },
       axisLine: { show: false },
@@ -78,7 +86,7 @@ export default function BarByDimension({
           position: 'right',
           color: '#475467',
           fontSize: 11,
-          formatter: ({ value }: { value: number }) => formatBRLShort(value),
+          formatter: ({ value }: { value: number }) => fmt(value),
         },
       },
     ],

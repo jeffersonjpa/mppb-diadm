@@ -1,4 +1,4 @@
-import type { AguaRecord, AguaKpis, CidadeSummary, SerieItem } from './types';
+import type { AguaRecord, AguaKpis, CidadeSummary, UnidadeSummary, SerieItem } from './types';
 
 export function computeKpis(
   records: AguaRecord[],
@@ -45,6 +45,25 @@ export function computeTopCidades(records: AguaRecord[], limit = 12): CidadeSumm
         valorTotal: r.valor,
         matriculas: 1
       });
+    }
+  }
+  return [...map.values()]
+    .sort((a, b) => b.valorTotal - a.valorTotal)
+    .slice(0, limit)
+    .map(d => ({ ...d, consumo: round2(d.consumo), valorTotal: round2(d.valorTotal) }));
+}
+
+export function computeTopUnidades(records: AguaRecord[], limit = 15): UnidadeSummary[] {
+  const map = new Map<string, UnidadeSummary>();
+  for (const r of records) {
+    const key = r.unidade || 'Não Informado';
+    const e = map.get(key);
+    if (e) {
+      e.consumo    += r.consumo;
+      e.valorTotal += r.valor;
+      e.matriculas += 1;
+    } else {
+      map.set(key, { unidade: key, consumo: r.consumo, valorTotal: r.valor, matriculas: 1 });
     }
   }
   return [...map.values()]

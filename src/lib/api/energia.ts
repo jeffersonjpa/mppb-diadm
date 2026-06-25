@@ -5,8 +5,9 @@ const registros   = rawData.registros   as EnergiaRecord[];
 const serieMensal = rawData.serieMensal as SerieItem[];
 const mesesPorAno = rawData.mesesPorAno as Record<string, number[]>;
 
-export const CIDADES = rawData.cidades as string[];
-export const ANOS    = rawData.anos    as number[];
+export const CIDADES  = rawData.cidades as string[];
+export const ANOS     = rawData.anos    as number[];
+export const UNIDADES = [...new Set(registros.map(r => r.unidade))].sort();
 
 export function getMesesPorAno(ano: number): number[] {
   return mesesPorAno[String(ano)] ?? [];
@@ -14,13 +15,14 @@ export function getMesesPorAno(ano: number): number[] {
 
 export function getRegistros(filters: EnergiaFilters): EnergiaRecord[] {
   let result = registros;
-  if (filters.ano    != null) result = result.filter(r => r.ano    === filters.ano);
-  if (filters.mes    != null) result = result.filter(r => r.mes    === filters.mes);
-  if (filters.cidade != null) result = result.filter(r => r.cidade === filters.cidade);
+  if (filters.ano     != null) result = result.filter(r => r.ano     === filters.ano);
+  if (filters.mes     != null) result = result.filter(r => r.mes     === filters.mes);
+  if (filters.cidade  != null) result = result.filter(r => r.cidade  === filters.cidade);
+  if (filters.unidade != null) result = result.filter(r => r.unidade === filters.unidade);
   return result;
 }
 
-export function getSerieMensal(anos: number[] = [2025, 2026]): SerieItem[] {
+export function getSerieMensal(anos: number[] = [2022, 2023, 2024, 2025, 2026]): SerieItem[] {
   return serieMensal.filter(s => anos.includes(s.ano));
 }
 

@@ -26,6 +26,13 @@ export interface CidadeSummary {
   matriculas: number;
 }
 
+export interface UnidadeSummary {
+  unidade:    string;
+  consumo:    number;
+  valorTotal: number;
+  matriculas: number;
+}
+
 export interface AguaKpis {
   valorTotal:  number;
   consumo:     number;

@@ -32,6 +32,13 @@ export interface CidadeSummary {
   ucs:        number;
 }
 
+export interface UnidadeSummary {
+  unidade:    string;
+  kwh:        number;
+  valorTotal: number;
+  registros:  number;
+}
+
 export interface EnergiaKpis {
   valorTotal:  number;
   kwh:         number;
@@ -43,7 +50,8 @@ export interface EnergiaKpis {
 }
 
 export interface EnergiaFilters {
-  ano:    number | null;
-  mes:    number | null;
-  cidade: string | null;
+  ano:     number | null;
+  mes:     number | null;
+  cidade:  string | null;
+  unidade: string | null;
 }

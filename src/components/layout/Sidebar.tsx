@@ -10,6 +10,7 @@ import {
   Zap,
   Droplets,
   Mail,
+  FileText,
   X,
   LogOut,
 } from 'lucide-react';
@@ -23,10 +24,11 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { href: '/visao-geral', label: 'Visão Geral', icon: LayoutGrid },
-  { href: '/terceirizados', label: 'Terceirizados', icon: Users },
   { href: '/energia', label: 'Energia Elétrica', icon: Zap },
   { href: '/agua', label: 'Água e Esgoto', icon: Droplets },
   { href: '/correios', label: 'Correios', icon: Mail },
+  { href: '/terceirizados', label: 'Terceirizados', icon: Users },
+  { href: '/contratos', label: 'Contratos', icon: FileText },
 ];
 
 const ROLE_LABEL: Record<string, string> = {
