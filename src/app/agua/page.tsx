@@ -1,7 +1,7 @@
 import AguaClient from './AguaClient';
 
 export const metadata = {
-  title: 'Água e Esgoto | DIADM',
+  title: 'Água | DIADM',
 };
 
 export default function AguaPage() {

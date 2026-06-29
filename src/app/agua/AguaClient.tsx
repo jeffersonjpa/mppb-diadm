@@ -362,6 +362,7 @@ export default function AguaClient() {
         rows={records}
         caption={`Detalhamento por matrícula CAGEPA · ${periodoLabel}`}
         pageSize={10}
+        searchable
       />
     </div>
   );

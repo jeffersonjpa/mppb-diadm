@@ -9,11 +9,9 @@ const PAGE_TITLES: Record<string, string> = {
   '/visao-geral':   'Visão Geral',
   '/terceirizados': 'Terceirizados',
   '/energia':       'Energia Elétrica',
-  '/agua':          'Água e Esgoto',
+  '/agua':          'Água',
   '/correios':      'Correios',
   '/telefonia':     'Telefonia',
-  '/combustivel':   'Combustível e Frota',
-  '/material':      'Material de Consumo',
 };
 
 interface TopbarProps {

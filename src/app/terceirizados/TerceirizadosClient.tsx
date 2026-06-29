@@ -360,6 +360,7 @@ export default function TerceirizadosClient() {
         rows={records}
         caption={`Detalhamento de Terceirizados · ${periodoLabel}`}
         pageSize={10}
+        searchable
       />
     </div>
   );

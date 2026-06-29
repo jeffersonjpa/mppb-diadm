@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 
 export interface Column<T> {
   key:       keyof T;
@@ -12,10 +12,11 @@ export interface Column<T> {
 }
 
 interface DataTableProps<T extends Record<string, unknown>> {
-  columns:   Column<T>[];
-  rows:      T[];
-  caption?:  string;
-  pageSize?: number;
+  columns:    Column<T>[];
+  rows:       T[];
+  caption?:   string;
+  pageSize?:  number;
+  searchable?: boolean;
 }
 
 export default function DataTable<T extends Record<string, unknown>>({
@@ -23,12 +24,23 @@ export default function DataTable<T extends Record<string, unknown>>({
   rows,
   caption,
   pageSize = 10,
+  searchable = false,
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<{ key: keyof T; dir: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+
+  const filtered = searchable && search.trim()
+    ? rows.filter(row =>
+        columns.some(col => {
+          const val = row[col.key];
+          return String(val ?? '').toLowerCase().includes(search.toLowerCase());
+        })
+      )
+    : rows;
 
   const sorted = sort
-    ? [...rows].sort((a, b) => {
+    ? [...filtered].sort((a, b) => {
         const av = a[sort.key];
         const bv = b[sort.key];
         const diff =
@@ -37,7 +49,7 @@ export default function DataTable<T extends Record<string, unknown>>({
             : String(av).localeCompare(String(bv), 'pt-BR');
         return sort.dir === 'asc' ? diff : -diff;
       })
-    : rows;
+    : filtered;
 
   const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
   const safePage   = Math.min(page, totalPages);
@@ -71,10 +83,29 @@ export default function DataTable<T extends Record<string, unknown>>({
 
   return (
     <div className="bg-mp-surface rounded-mp-card shadow-mp-card overflow-hidden">
-      {/* Caption */}
-      {caption && (
-        <div className="px-5 py-3 border-b border-mp-border">
-          <p className="text-[12px] text-mp-muted">{caption}</p>
+      {/* Caption + Search */}
+      {(caption || searchable) && (
+        <div className="px-5 py-3 border-b border-mp-border flex items-center justify-between gap-4">
+          {caption
+            ? <p className="text-[12px] text-mp-muted">{caption}</p>
+            : <span />}
+          {searchable && (
+            <div className="relative">
+              <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-mp-faint pointer-events-none" />
+              <input
+                type="text"
+                value={search}
+                onChange={e => { setSearch(e.target.value); setPage(1); }}
+                placeholder="Pesquisar…"
+                className="
+                  pl-7 pr-3 py-1.5 text-[12px] rounded border border-mp-border
+                  bg-mp-head text-mp-text placeholder:text-mp-faint
+                  focus:outline-none focus:ring-1 focus:ring-mp-primary focus:border-mp-primary
+                  w-48 transition-all
+                "
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -148,9 +179,14 @@ export default function DataTable<T extends Record<string, unknown>>({
         <div className="px-5 py-3 border-t border-mp-border flex items-center justify-between flex-wrap gap-3">
           {/* Info */}
           <p className="text-[12px] text-mp-muted tabular-nums">
-            {rows.length === 0
-              ? 'Nenhum registro'
-              : `Exibindo ${start + 1}–${Math.min(start + pageSize, sorted.length)} de ${sorted.length} registro${sorted.length !== 1 ? 's' : ''}`}
+            {sorted.length === 0
+              ? 'Nenhum registro encontrado'
+              : <>
+                  {`Exibindo ${start + 1}–${Math.min(start + pageSize, sorted.length)} de ${sorted.length} registro${sorted.length !== 1 ? 's' : ''}`}
+                  {searchable && search.trim() && sorted.length !== rows.length && (
+                    <span className="ml-1 text-mp-faint">(de {rows.length} total)</span>
+                  )}
+                </>}
           </p>
 
           {/* Navegação */}

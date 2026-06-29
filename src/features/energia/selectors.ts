@@ -1,4 +1,5 @@
-import type { EnergiaRecord, EnergiaKpis, CidadeSummary, UnidadeSummary, SerieItem } from './types';
+import type { EnergiaRecord, EnergiaKpis, CidadeSummary, UnidadeSummary, SerieItem, EficienciaUnidade } from './types';
+import type { EficienciaItem } from '@/components/charts/EfficiencyGroupedBar';
 
 export function computeKpis(
   records: EnergiaRecord[],
@@ -62,3 +63,29 @@ export function formatSerieForChart(serie: SerieItem[], ano: number): { mes: num
 }
 
 function round1(n: number) { return Math.round(n * 10) / 10; }
+
+export function computeEficiencia(unidades: EficienciaUnidade[]): EficienciaItem[] {
+  const totalConsumo = unidades.reduce((s, u) => s + u.consumo, 0);
+  const totalArea    = unidades.reduce((s, u) => s + (u.areaM2  ?? 0), 0);
+  const totalMembros = unidades.reduce((s, u) => s + (u.membros ?? 0), 0);
+
+  return unidades.map(u => {
+    const consumoPct  = totalConsumo > 0 ? (u.consumo  / totalConsumo)  * 100 : 0;
+    const areaPct     = totalArea    > 0 && u.areaM2   != null ? (u.areaM2   / totalArea)    * 100 : null;
+    const membrosPct  = totalMembros > 0 && u.membros  != null ? (u.membros  / totalMembros) * 100 : null;
+    const eficiencia  = consumoPct > 0 && membrosPct != null && membrosPct > 0
+      ? consumoPct / membrosPct
+      : null;
+
+    return {
+      label:      u.label,
+      consumoPct: round2(consumoPct),
+      areaPct:    areaPct   != null ? round2(areaPct)   : null,
+      membrosPct: membrosPct != null ? round2(membrosPct) : null,
+      eficiencia: eficiencia != null ? round2(eficiencia) : null,
+      isServidor: u.isServidor,
+    };
+  });
+}
+
+function round2(n: number) { return Math.round(n * 100) / 100; }

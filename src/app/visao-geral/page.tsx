@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import AiInsight from '@/components/ai/AiInsight';
 import {
-  Users, Zap, Droplets, Mail, Phone, Fuel, Package,
+  Users, Zap, Droplets, Mail, Phone,
   ArrowRight, TrendingUp,
 } from 'lucide-react';
 import { formatBRL, formatMonthYear } from '@/lib/format';
@@ -34,7 +34,7 @@ function getTerceirizadosResumo() {
   return { valor: ultimo.valorTotal, variacao, totalContratos: ultimo.registros, mes: ultimo.mes, ano: ultimo.ano };
 }
 
-/* ── Dados do mês mais recente de Água e Esgoto (Abr/2026) ──────── */
+/* ── Dados do mês mais recente de Água (Abr/2026) ──────── */
 function getAguaResumo() {
   const serie = getAguaSerie([2026]);
   const ultimo = serie.at(-1);
@@ -92,7 +92,7 @@ export default function VisaoGeralPage() {
       subtitulo: `Fev/2026 · ${terceirizadosResumo?.totalContratos || 0} contratos`,
     },
     {
-      id: 'agua', href: '/agua', label: 'Água e Esgoto',
+      id: 'agua', href: '/agua', label: 'Água',
       icon: Droplets, ativo: true,
       valor:    aguaResumo?.valor,
       variacao: aguaResumo?.variacao,
@@ -108,16 +108,6 @@ export default function VisaoGeralPage() {
     {
       id: 'telefonia', href: '/telefonia', label: 'Telefonia',
       icon: Phone, ativo: false,
-      subtitulo: 'Em integração',
-    },
-    {
-      id: 'combustivel', href: '/combustivel', label: 'Combustível e Frota',
-      icon: Fuel, ativo: false,
-      subtitulo: 'Em integração',
-    },
-    {
-      id: 'material', href: '/material', label: 'Material de Consumo',
-      icon: Package, ativo: false,
       subtitulo: 'Em integração',
     },
   ];

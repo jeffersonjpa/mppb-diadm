@@ -55,3 +55,12 @@ export interface EnergiaFilters {
   cidade:  string | null;
   unidade: string | null;
 }
+
+export interface EficienciaUnidade {
+  key:        string;
+  label:      string;
+  consumo:    number;
+  areaM2:     number | null;
+  membros:    number | null;
+  isServidor: boolean;
+}

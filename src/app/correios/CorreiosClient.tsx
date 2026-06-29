@@ -285,6 +285,7 @@ export default function CorreiosClient() {
         rows={records}
         caption={`Detalhamento por postagem Correios · ${periodoLabel}`}
         pageSize={10}
+        searchable
       />
     </div>
   );

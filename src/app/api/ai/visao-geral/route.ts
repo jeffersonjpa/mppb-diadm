@@ -54,7 +54,7 @@ function buildPrompt(payload: VisaoGeralAiPayload): string {
   const modulos = [
     kpis.energia       && `Energia Elétrica: ${fmtBRL(kpis.energia.valor)} (${fmtVar(kpis.energia.variacao)})`,
     kpis.terceirizados && `Terceirizados: ${fmtBRL(kpis.terceirizados.valor)} (${fmtVar(kpis.terceirizados.variacao)})`,
-    kpis.agua          && `Água e Esgoto: ${fmtBRL(kpis.agua.valor)} (${fmtVar(kpis.agua.variacao)})`,
+    kpis.agua          && `Água: ${fmtBRL(kpis.agua.valor)} (${fmtVar(kpis.agua.variacao)})`,
     kpis.correios      && `Correios: ${fmtBRL(kpis.correios.valor)} (${fmtVar(kpis.correios.variacao)})`,
   ].filter(Boolean).join('\n- ');
 

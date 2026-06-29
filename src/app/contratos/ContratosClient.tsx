@@ -277,6 +277,7 @@ export default function ContratosClient() {
         rows={records}
         caption={`Detalhamento · ${periodoLabel} · ${records.length} contrato${records.length !== 1 ? 's' : ''}`}
         pageSize={15}
+        searchable
       />
     </div>
   );

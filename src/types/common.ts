@@ -2,9 +2,7 @@ export type ModuleId =
   | 'terceirizados'
   | 'energia'
   | 'agua'
-  | 'telefonia'
-  | 'combustivel'
-  | 'material';
+  | 'telefonia';
 
 export interface DespesaBase extends Record<string, unknown> {
   id: string;

@@ -16,7 +16,10 @@ import {
   getRegistros, getSerieMensal, getMesesPorAno,
   CIDADES, ANOS, UNIDADES,
 } from '@/lib/api/energia';
-import { computeKpis, computeTopCidades, computeTopUnidades, formatSerieForChart } from '@/features/energia/selectors';
+import { computeKpis, computeTopCidades, computeTopUnidades, formatSerieForChart, computeEficiencia } from '@/features/energia/selectors';
+import EfficiencyGroupedBar from '@/components/charts/EfficiencyGroupedBar';
+import eficienciaData from '@/data/eficiencia-data.json';
+import type { EficienciaUnidade } from '@/features/energia/types';
 import { formatBRL, formatKwh, MESES_SHORT, MESES_FULL } from '@/lib/format';
 import type { EnergiaRecord, EnergiaFilters } from '@/features/energia/types';
 
@@ -99,6 +102,8 @@ const COLUMNS: Column<EnergiaRecord>[] = [
 
 /* ── Componente principal ──────────────────────────────────────── */
 export default function EnergiaClient() {
+  const [cidadeView, setCidadeView] = useState<'cidades' | 'eficiencia'>('cidades');
+
   const [filters, setFilters] = useState<EnergiaFilters>({
     ano:     DEFAULT_ANO,
     mes:     DEFAULT_MES,
@@ -173,6 +178,12 @@ export default function EnergiaClient() {
   const topCidades = useMemo(
     () => computeTopCidades(records, 12).map(d => ({ label: d.cidade, value: d.valorTotal })),
     [records]
+  );
+
+  /* Gráfico de eficiência (dados estáticos — acumulado histórico) */
+  const eficienciaItems = useMemo(
+    () => computeEficiencia(eficienciaData.unidades as EficienciaUnidade[]),
+    []
   );
 
   /* Gráfico de barras — unidades */
@@ -299,15 +310,50 @@ export default function EnergiaClient() {
       {/* ── Gráficos ─────────────────────────────────────────────── */}
       <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))' }}>
         <ChartCard
-          title="Top Cidades por Custo"
-          subtitle={`${topCidades.length} cidades · ${periodoLabel}`}
-          minHeight={Math.max(300, topCidades.length * 34)}
+          title={cidadeView === 'cidades' ? 'Top Cidades por Custo' : 'Índice Membros × Consumo de Energia'}
+          subtitle={cidadeView === 'cidades'
+            ? `${topCidades.length} cidades · ${periodoLabel}`
+            : 'Consumo acumulado · % Área Própria · % Qtd Membros'}
+          minHeight={cidadeView === 'cidades'
+            ? Math.max(300, topCidades.length * 34)
+            : Math.max(400, eficienciaItems.length * 54)}
+          actions={
+            <div className="flex rounded-md overflow-hidden border border-mp-border text-[11px] font-semibold">
+              <button
+                onClick={() => setCidadeView('cidades')}
+                className={`px-3 py-1 transition-colors ${
+                  cidadeView === 'cidades'
+                    ? 'bg-mp-primary text-white'
+                    : 'bg-mp-surface text-mp-muted hover:bg-mp-tint'
+                }`}
+              >
+                CIDADES
+              </button>
+              <button
+                onClick={() => setCidadeView('eficiencia')}
+                className={`px-3 py-1 transition-colors ${
+                  cidadeView === 'eficiencia'
+                    ? 'bg-mp-primary text-white'
+                    : 'bg-mp-surface text-mp-muted hover:bg-mp-tint'
+                }`}
+              >
+                EFICIÊNCIA
+              </button>
+            </div>
+          }
         >
-          <BarByDimension
-            data={topCidades}
-            height={Math.max(300, topCidades.length * 34)}
-            onBarClick={cidade => setFilters(f => ({ ...f, cidade }))}
-          />
+          {cidadeView === 'cidades' ? (
+            <BarByDimension
+              data={topCidades}
+              height={Math.max(300, topCidades.length * 34)}
+              onBarClick={cidade => setFilters(f => ({ ...f, cidade }))}
+            />
+          ) : (
+            <EfficiencyGroupedBar
+              data={eficienciaItems}
+              height={Math.max(400, eficienciaItems.length * 54)}
+            />
+          )}
         </ChartCard>
 
         <ChartCard
@@ -360,6 +406,7 @@ export default function EnergiaClient() {
         rows={records}
         caption={`Detalhamento por unidade · ${periodoLabel}`}
         pageSize={10}
+        searchable
       />
     </div>
   );

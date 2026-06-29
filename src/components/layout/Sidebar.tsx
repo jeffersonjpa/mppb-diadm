@@ -25,7 +25,7 @@ interface NavItem {
 const NAV: NavItem[] = [
   { href: '/visao-geral', label: 'Visão Geral', icon: LayoutGrid },
   { href: '/energia', label: 'Energia Elétrica', icon: Zap },
-  { href: '/agua', label: 'Água e Esgoto', icon: Droplets },
+  { href: '/agua', label: 'Água', icon: Droplets },
   { href: '/correios', label: 'Correios', icon: Mail },
   { href: '/terceirizados', label: 'Terceirizados', icon: Users },
   { href: '/contratos', label: 'Contratos', icon: FileText },
