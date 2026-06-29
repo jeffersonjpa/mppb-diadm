@@ -45,5 +45,5 @@ export interface ModalidadeSummary {
 export interface ContratoFilters {
   situacao:         string | null;
   anoPublicacao:    number | null;
-  alertaVencimento: 'expirado' | 'vigente' | null;
+  alertaVencimento: 'expirado' | 'vigente' | 'vencendo30' | 'vencendo60' | 'vencendo90' | null;
 }

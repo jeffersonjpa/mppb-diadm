@@ -144,9 +144,12 @@ export default function ContratosClient() {
 
   const ANOS_OPTIONS     = ANOS_PUBLICACAO.map(a => ({ value: a, label: String(a) })).reverse();
   const SITUACAO_OPTIONS = SITUACOES.map(s => ({ value: s, label: s }));
-  const ALERTA_OPTIONS   = [
-    { value: 'expirado', label: 'Expirado (Ativo)' },
-    { value: 'vigente',  label: 'Vigente (Ativo)'  },
+  const ALERTA_OPTIONS = [
+    { value: 'expirado',   label: 'Expirado (Ativo)'     },
+    { value: 'vencendo30', label: 'Vencendo em 30 dias'  },
+    { value: 'vencendo60', label: 'Vencendo em 60 dias'  },
+    { value: 'vencendo90', label: 'Vencendo em 90 dias'  },
+    { value: 'vigente',    label: 'Vigente (Ativo)'      },
   ];
 
   const periodoLabel = [

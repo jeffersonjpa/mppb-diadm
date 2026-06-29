@@ -28,9 +28,14 @@ export function getContratos(filters: ContratoFilters): ContratoRecord[] {
       if (r.situacao !== 'Ativo') return false;
       const dt   = parseDate(r.vigenciaTermino);
       const dias = dt ? Math.round((dt.getTime() - TODAY.getTime()) / 86_400_000) : null;
-      if (filters.alertaVencimento === 'expirado') return dias !== null && dias < 0;
-      if (filters.alertaVencimento === 'vigente')  return dias === null || dias >= 0;
-      return true;
+      switch (filters.alertaVencimento) {
+        case 'expirado':   return dias !== null && dias < 0;
+        case 'vencendo30': return dias !== null && dias >= 0 && dias <= 30;
+        case 'vencendo60': return dias !== null && dias >= 0 && dias <= 60;
+        case 'vencendo90': return dias !== null && dias >= 0 && dias <= 90;
+        case 'vigente':    return dias === null || dias >= 0;
+        default:           return true;
+      }
     });
   }
   return result;
