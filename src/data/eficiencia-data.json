@@ -3,6 +3,10 @@
     {
       "key": "sede_adm",
       "label": "Sede Administrativa da PGJ",
+      "cidade": "João Pessoa",
+      "energiaUnidades": [
+        "Sede Administrativa Da Procuradoria Geral"
+      ],
       "consumo": 753892.4,
       "areaM2": 1588.85,
       "membros": null,
@@ -11,6 +15,10 @@
     {
       "key": "nucleo_criminal",
       "label": "Promotorias de JP (Núcleo Criminal)",
+      "cidade": "João Pessoa",
+      "energiaUnidades": [
+        "Ministerio Publico Do Estado Da Paraiba"
+      ],
       "consumo": 694747.75,
       "areaM2": 819.6,
       "membros": 36,
@@ -19,6 +27,10 @@
     {
       "key": "sede_inst",
       "label": "Sede Institucional da Procuradoria Geral",
+      "cidade": "João Pessoa",
+      "energiaUnidades": [
+        "Sede Institucional Da Procuradoria Geral"
+      ],
       "consumo": 514498.32,
       "areaM2": 2327.95,
       "membros": null,
@@ -27,6 +39,10 @@
     {
       "key": "pj_campina",
       "label": "PJ de Campina Grande",
+      "cidade": "Campina Grande",
+      "energiaUnidades": [
+        "Ministerio Publico Procuradoria Geral De Justica Da Pb"
+      ],
       "consumo": 416134.2,
       "areaM2": 3027.98,
       "membros": 33,
@@ -35,6 +51,10 @@
     {
       "key": "nucleo_civel",
       "label": "Promotorias de JP (Núcleo Cível)",
+      "cidade": "João Pessoa",
+      "energiaUnidades": [
+        "Nucleo Civel Do Mppb"
+      ],
       "consumo": 221088.6,
       "areaM2": 819.6,
       "membros": 15,
@@ -43,6 +63,11 @@
     {
       "key": "mangabeira",
       "label": "Promotorias de JP (Mangabeira)",
+      "cidade": "João Pessoa",
+      "energiaUnidades": [
+        "Arquivo Do Ministerio Publico Da Paraiba",
+        "Ministerio Publico Do Estado Da Paraiba Pgj"
+      ],
       "consumo": 218741.49,
       "areaM2": 1247.68,
       "membros": 12,
@@ -51,6 +76,10 @@
     {
       "key": "cira",
       "label": "Promotoria de Combate à Sonegação Fiscal",
+      "cidade": "João Pessoa",
+      "energiaUnidades": [
+        "Promotoria De Combate A Sonegacao Fiscal"
+      ],
       "consumo": 146758.39,
       "areaM2": 808.74,
       "membros": 3,
@@ -59,6 +88,10 @@
     {
       "key": "sousa",
       "label": "PJ de Sousa",
+      "cidade": "Sousa",
+      "energiaUnidades": [
+        "Promotoria De Justica De Sousa"
+      ],
       "consumo": 118578.77,
       "areaM2": 616.15,
       "membros": 7,
@@ -67,6 +100,11 @@
     {
       "key": "guarabira",
       "label": "PJ de Guarabira",
+      "cidade": "Guarabira",
+      "energiaUnidades": [
+        "Promotoria De Justica De Guarabira",
+        "Ministerio Publico Do Estado Da Paraiba Pgj"
+      ],
       "consumo": 104683.17,
       "areaM2": 558.26,
       "membros": 6,
@@ -75,6 +113,10 @@
     {
       "key": "santa_rita",
       "label": "PJ de Santa Rita",
+      "cidade": "Santa Rita",
+      "energiaUnidades": [
+        "Promotoria De Justica De Santa Rita"
+      ],
       "consumo": 60035.73,
       "areaM2": 330.2,
       "membros": 7,
@@ -83,6 +125,10 @@
     {
       "key": "cajazeiras",
       "label": "PJ de Cajazeiras",
+      "cidade": "Cajazeiras",
+      "energiaUnidades": [
+        "Promotoria De Justica De Cajazeiras"
+      ],
       "consumo": 52048.56,
       "areaM2": 368.5,
       "membros": 5,
@@ -91,6 +137,10 @@
     {
       "key": "monteiro",
       "label": "PJ de Monteiro",
+      "cidade": "Monteiro",
+      "energiaUnidades": [
+        "Promotoria De Justica De Monteiro"
+      ],
       "consumo": 45829.14,
       "areaM2": 341.92,
       "membros": 2,
@@ -99,6 +149,11 @@
     {
       "key": "patos",
       "label": "PJ de Patos",
+      "cidade": "Patos",
+      "energiaUnidades": [
+        "Promotoria De Justica De Patos",
+        "Ministerio Publico Do Estado Da Paraiba Pgj"
+      ],
       "consumo": 85440.76,
       "areaM2": 885.48,
       "membros": 8,
@@ -107,6 +162,11 @@
     {
       "key": "mamanguape",
       "label": "PJ de Mamanguape",
+      "cidade": "Mamanguape",
+      "energiaUnidades": [
+        "Promotoria De Mamanguape",
+        "Ministerio Publico Do Estado Da Paraiba Pgj"
+      ],
       "consumo": 52109.42,
       "areaM2": 470.0,
       "membros": 4,
@@ -115,6 +175,11 @@
     {
       "key": "cabedelo",
       "label": "PJ de Cabedelo",
+      "cidade": "Cabedelo",
+      "energiaUnidades": [
+        "Promotoria De Justica De Cabedelo",
+        "Ministerio Publico Do Estado Da Paraiba Pgj"
+      ],
       "consumo": 53025.7,
       "areaM2": 350.0,
       "membros": 5,
@@ -123,6 +188,11 @@
     {
       "key": "sape",
       "label": "PJ de Sapé",
+      "cidade": "Sapé",
+      "energiaUnidades": [
+        "Promotoria De Justica De Sape",
+        "Ministerio Publico Do Estado Da Paraiba Pgj"
+      ],
       "consumo": 45623.37,
       "areaM2": 400.0,
       "membros": 4,

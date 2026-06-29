@@ -1,0 +1,1 @@
+O custo total de energia elétrica em **Areia** foi de **R$ 11.045,73**, apresentando uma variação de **-1.5%** em relação ao mês anterior. O consumo total foi de **11.880 kWh**, com uma redução de **-2.1%**. O custo médio por quilowatt-hora foi de **R$ 0.9298**, considerando **50 unidades consumidoras** na localidade.

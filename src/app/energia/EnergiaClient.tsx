@@ -5,8 +5,9 @@ import { Zap, TrendingUp, Activity } from 'lucide-react';
 
 import KpiCard       from '@/components/kpi/KpiCard';
 import AiInsight    from '@/components/ai/AiInsight';
-import FilterBar     from '@/components/filters/FilterBar';
-import SelectFilter  from '@/components/filters/SelectFilter';
+import FilterBar          from '@/components/filters/FilterBar';
+import SelectFilter       from '@/components/filters/SelectFilter';
+import MultiSelectFilter  from '@/components/filters/MultiSelectFilter';
 import ChartCard     from '@/components/charts/ChartCard';
 import BarByDimension from '@/components/charts/BarByDimension';
 import MonthlyLine   from '@/components/charts/MonthlyLine';
@@ -105,10 +106,10 @@ export default function EnergiaClient() {
   const [cidadeView, setCidadeView] = useState<'cidades' | 'eficiencia'>('cidades');
 
   const [filters, setFilters] = useState<EnergiaFilters>({
-    ano:     DEFAULT_ANO,
-    mes:     DEFAULT_MES,
-    cidade:  null,
-    unidade: null,
+    ano:      DEFAULT_ANO,
+    mes:      DEFAULT_MES,
+    cidades:  [],
+    unidades: [],
   });
 
   // Opções de mês dependem do ano selecionado
@@ -124,10 +125,10 @@ export default function EnergiaClient() {
 
   // Conta quantos filtros estão fora do padrão
   const activeCount =
-    (filters.ano     != null ? 1 : 0) +
-    (filters.mes     != null ? 1 : 0) +
-    (filters.cidade  != null ? 1 : 0) +
-    (filters.unidade != null ? 1 : 0);
+    (filters.ano             != null ? 1 : 0) +
+    (filters.mes             != null ? 1 : 0) +
+    (filters.cidades.length   > 0    ? 1 : 0) +
+    (filters.unidades.length  > 0    ? 1 : 0);
 
   /* Dados filtrados */
   const records = useMemo(() => getRegistros(filters), [filters]);
@@ -180,11 +181,21 @@ export default function EnergiaClient() {
     [records]
   );
 
-  /* Gráfico de eficiência (dados estáticos — acumulado histórico) */
-  const eficienciaItems = useMemo(
+  /* Gráfico de eficiência — percentuais sempre relativos ao total completo */
+  const eficienciaItemsAll = useMemo(
     () => computeEficiencia(eficienciaData.unidades as EficienciaUnidade[]),
     []
   );
+
+  /* Filtro de cidade/unidade aplicado só na exibição, sem alterar o denominador */
+  const eficienciaItems = useMemo(() => {
+    return eficienciaItemsAll.filter((_item, idx) => {
+      const u = (eficienciaData.unidades as EficienciaUnidade[])[idx];
+      if (filters.cidades.length  > 0 && !filters.cidades.includes(u.cidade))                                   return false;
+      if (filters.unidades.length > 0 && !u.energiaUnidades.some(eu => filters.unidades.includes(eu)))          return false;
+      return true;
+    });
+  }, [eficienciaItemsAll, filters.cidades, filters.unidades]);
 
   /* Gráfico de barras — unidades */
   const topUnidades = useMemo(
@@ -214,9 +225,10 @@ export default function EnergiaClient() {
 
   /* Subtítulo do período */
   const periodoLabel = [
-    filters.ano   ? String(filters.ano)                  : 'Todos os anos',
-    filters.mes   ? MESES_FULL[filters.mes - 1]          : 'Todos os meses',
-    filters.cidade ?? null,
+    filters.ano  ? String(filters.ano)         : 'Todos os anos',
+    filters.mes  ? MESES_FULL[filters.mes - 1] : 'Todos os meses',
+    filters.cidades.length  === 1 ? filters.cidades[0]  : filters.cidades.length  > 1 ? `${filters.cidades.length} cidades`   : null,
+    filters.unidades.length === 1 ? filters.unidades[0] : filters.unidades.length > 1 ? `${filters.unidades.length} unidades` : null,
   ].filter(Boolean).join(' · ');
 
   const custoKwhStr = kpis.custoPorKwh > 0
@@ -275,7 +287,7 @@ export default function EnergiaClient() {
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar
         activeCount={activeCount}
-        onClear={() => setFilters({ ano: null, mes: null, cidade: null, unidade: null })}
+        onClear={() => setFilters({ ano: null, mes: null, cidades: [], unidades: [] })}
       >
         <SelectFilter
           label="Ano"
@@ -291,18 +303,18 @@ export default function EnergiaClient() {
           onChange={v => setFilters(f => ({ ...f, mes: v ? parseInt(v) : null }))}
           placeholder="Todos"
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Cidade"
-          value={filters.cidade}
+          values={filters.cidades}
           options={CIDADE_OPTIONS}
-          onChange={v => setFilters(f => ({ ...f, cidade: v }))}
+          onChange={cidades => setFilters(f => ({ ...f, cidades }))}
           placeholder="Todas"
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Unidade"
-          value={filters.unidade}
+          values={filters.unidades}
           options={UNIDADE_OPTIONS}
-          onChange={v => setFilters(f => ({ ...f, unidade: v }))}
+          onChange={unidades => setFilters(f => ({ ...f, unidades }))}
           placeholder="Todas"
         />
       </FilterBar>
@@ -346,7 +358,12 @@ export default function EnergiaClient() {
             <BarByDimension
               data={topCidades}
               height={Math.max(300, topCidades.length * 34)}
-              onBarClick={cidade => setFilters(f => ({ ...f, cidade }))}
+              onBarClick={cidade => setFilters(f => ({
+                ...f,
+                cidades: f.cidades.includes(cidade)
+                  ? f.cidades.filter(c => c !== cidade)
+                  : [...f.cidades, cidade],
+              }))}
             />
           ) : (
             <EfficiencyGroupedBar
@@ -396,7 +413,12 @@ export default function EnergiaClient() {
           data={topUnidades}
           height={Math.max(400, topUnidades.length * 34)}
           color="#2E6DB4"
-          onBarClick={unidade => setFilters(f => ({ ...f, unidade }))}
+          onBarClick={unidade => setFilters(f => ({
+            ...f,
+            unidades: f.unidades.includes(unidade)
+              ? f.unidades.filter(u => u !== unidade)
+              : [...f.unidades, unidade],
+          }))}
         />
       </ChartCard>
 

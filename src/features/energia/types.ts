@@ -50,17 +50,19 @@ export interface EnergiaKpis {
 }
 
 export interface EnergiaFilters {
-  ano:     number | null;
-  mes:     number | null;
-  cidade:  string | null;
-  unidade: string | null;
+  ano:      number | null;
+  mes:      number | null;
+  cidades:  string[];
+  unidades: string[];
 }
 
 export interface EficienciaUnidade {
-  key:        string;
-  label:      string;
-  consumo:    number;
-  areaM2:     number | null;
-  membros:    number | null;
-  isServidor: boolean;
+  key:             string;
+  label:           string;
+  cidade:          string;
+  energiaUnidades: string[];
+  consumo:         number;
+  areaM2:          number | null;
+  membros:         number | null;
+  isServidor:      boolean;
 }

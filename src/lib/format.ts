@@ -1,3 +1,6 @@
+﻿export function normalizeSearch(text: string): string {
+  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
 
 export function formatBRL(value: number): string {
   return value.toLocaleString('pt-BR', {
@@ -48,3 +51,4 @@ export const MESES_FULL = [
 ];
 
 export const MESES_SHORT = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+

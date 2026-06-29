@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { normalizeSearch } from '@/lib/format';
 
 export interface Column<T> {
   key:       keyof T;
@@ -30,11 +31,12 @@ export default function DataTable<T extends Record<string, unknown>>({
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
 
-  const filtered = searchable && search.trim()
+  const normalizedSearch = normalizeSearch(search.trim());
+  const filtered = searchable && normalizedSearch
     ? rows.filter(row =>
         columns.some(col => {
           const val = row[col.key];
-          return String(val ?? '').toLowerCase().includes(search.toLowerCase());
+          return normalizeSearch(String(val ?? '')).includes(normalizedSearch);
         })
       )
     : rows;

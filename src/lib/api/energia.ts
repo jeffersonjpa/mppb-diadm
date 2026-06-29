@@ -15,10 +15,10 @@ export function getMesesPorAno(ano: number): number[] {
 
 export function getRegistros(filters: EnergiaFilters): EnergiaRecord[] {
   let result = registros;
-  if (filters.ano     != null) result = result.filter(r => r.ano     === filters.ano);
-  if (filters.mes     != null) result = result.filter(r => r.mes     === filters.mes);
-  if (filters.cidade  != null) result = result.filter(r => r.cidade  === filters.cidade);
-  if (filters.unidade != null) result = result.filter(r => r.unidade === filters.unidade);
+  if (filters.ano            != null)     result = result.filter(r => r.ano === filters.ano);
+  if (filters.mes            != null)     result = result.filter(r => r.mes === filters.mes);
+  if (filters.cidades.length  > 0)        result = result.filter(r => filters.cidades.includes(r.cidade));
+  if (filters.unidades.length > 0)        result = result.filter(r => filters.unidades.includes(r.unidade));
   return result;
 }
 
