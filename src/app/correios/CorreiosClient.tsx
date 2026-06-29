@@ -6,7 +6,8 @@ import { Mail, TrendingUp, Activity } from 'lucide-react';
 import KpiCard       from '@/components/kpi/KpiCard';
 import AiInsight    from '@/components/ai/AiInsight';
 import FilterBar     from '@/components/filters/FilterBar';
-import SelectFilter  from '@/components/filters/SelectFilter';
+import SelectFilter     from '@/components/filters/SelectFilter';
+import MultiSelectFilter from '@/components/filters/MultiSelectFilter';
 import ChartCard     from '@/components/charts/ChartCard';
 import BarByDimension from '@/components/charts/BarByDimension';
 import MonthlyLine   from '@/components/charts/MonthlyLine';
@@ -57,24 +58,24 @@ const COLUMNS: Column<CorreiosRecord>[] = [
 
 export default function CorreiosClient() {
   const [filters, setFilters] = useState<CorreiosFilters>({
-    ano: DEFAULT_ANO,
-    mes: DEFAULT_MES,
-    cidade: null,
+    anos:    [DEFAULT_ANO],
+    mes:     DEFAULT_MES,
+    cidades: [],
   });
 
-  const mesesDisponiveis = useMemo(
-    () => filters.ano != null ? getMesesPorAno(filters.ano) : [],
-    [filters.ano]
-  );
+  const mesesDisponiveis = useMemo(() => {
+    if (filters.anos.length === 0) return [...new Set(ANOS.flatMap(a => getMesesPorAno(a)))].sort((a, b) => a - b);
+    return [...new Set(filters.anos.flatMap(a => getMesesPorAno(a)))].sort((a, b) => a - b);
+  }, [filters.anos]);
 
-  const ANOS_OPTIONS   = ANOS.map(a => ({ value: a, label: String(a) }));
+  const ANOS_OPTIONS   = ANOS.map(a => ({ value: String(a), label: String(a) }));
   const MESES_OPTIONS  = mesesDisponiveis.map(m => ({ value: m, label: MESES_FULL[m - 1] }));
   const CIDADE_OPTIONS = CIDADES.map(c => ({ value: c, label: c }));
 
   const activeCount =
-    (filters.ano    != null ? 1 : 0) +
-    (filters.mes    != null ? 1 : 0) +
-    (filters.cidade != null ? 1 : 0);
+    (filters.anos.length    > 0 ? 1 : 0) +
+    (filters.mes           != null ? 1 : 0) +
+    (filters.cidades.length > 0 ? 1 : 0);
 
   const records = useMemo(() => getRegistros(filters), [filters]);
 
@@ -97,7 +98,7 @@ export default function CorreiosClient() {
 
     const prevMonthRecs = getRegistros({
       ...filters,
-      ano: prevAno,
+      anos: [prevAno],
       mes: prevMes,
     });
     const prevTotal = prevMonthRecs.reduce((s, r) => s + r.valorLiquido, 0);
@@ -111,13 +112,13 @@ export default function CorreiosClient() {
   }, [records, filters]);
 
   const kpis = useMemo(() => {
-    const isSingleMonth = filters.ano !== null && filters.mes !== null;
+    const isSingleMonth = filters.anos.length === 1 && filters.mes !== null;
     if (isSingleMonth) {
       return computeKpis(records, latestAndPrev.prev);
     } else {
       return computeKpis(records, latestAndPrev.prev, latestAndPrev.latest);
     }
-  }, [records, latestAndPrev, filters.ano, filters.mes]);
+  }, [records, latestAndPrev, filters.anos, filters.mes]);
 
   const topCidades = useMemo(
     () => computeTopCidades(records, 12).map(d => ({ label: d.cidade, value: d.valorTotal })),
@@ -143,20 +144,17 @@ export default function CorreiosClient() {
   });
 
   const periodoLabel = [
-    filters.ano   ? String(filters.ano)                  : 'Todos os anos',
-    filters.mes   ? MESES_FULL[filters.mes - 1]          : 'Todos os meses',
-    filters.cidade ?? null,
+    filters.anos.length    > 0 ? filters.anos.join(', ')         : 'Todos os anos',
+    filters.mes           != null ? MESES_FULL[filters.mes - 1]  : 'Todos os meses',
+    filters.cidades.length > 0 ? filters.cidades.join(', ')      : null,
   ].filter(Boolean).join(' · ');
 
   const custoMedioStr = kpis.custoMedio > 0
     ? `R$ ${kpis.custoMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/item`
     : '—';
 
-  function handleAnoChange(v: string | null) {
-    const newAno = v ? parseInt(v) : null;
-    const meses  = newAno ? getMesesPorAno(newAno) : [];
-    const newMes = meses.length > 0 ? Math.max(...meses) : null;
-    setFilters(f => ({ ...f, ano: newAno, mes: newMes }));
+  function handleAnosChange(values: string[]) {
+    setFilters(f => ({ ...f, anos: values.map(Number) }));
   }
 
   return (
@@ -212,14 +210,15 @@ export default function CorreiosClient() {
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar
         activeCount={activeCount}
-        onClear={() => setFilters({ ano: null, mes: null, cidade: null })}
+        onClear={() => setFilters({ anos: [], mes: null, cidades: [] })}
       >
-        <SelectFilter
+        <MultiSelectFilter
           label="Ano"
-          value={filters.ano}
+          values={filters.anos.map(String)}
           options={ANOS_OPTIONS}
-          onChange={handleAnoChange}
+          onChange={handleAnosChange}
           placeholder="Todos"
+          searchable={false}
         />
         <SelectFilter
           label="Mês"
@@ -228,11 +227,11 @@ export default function CorreiosClient() {
           onChange={v => setFilters(f => ({ ...f, mes: v ? parseInt(v) : null }))}
           placeholder="Todos"
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Cidade"
-          value={filters.cidade}
+          values={filters.cidades}
           options={CIDADE_OPTIONS}
-          onChange={v => setFilters(f => ({ ...f, cidade: v }))}
+          onChange={v => setFilters(f => ({ ...f, cidades: v }))}
           placeholder="Todas"
         />
       </FilterBar>
@@ -247,7 +246,10 @@ export default function CorreiosClient() {
           <BarByDimension
             data={topCidades}
             height={Math.max(300, topCidades.length * 34)}
-            onBarClick={cidade => setFilters(f => ({ ...f, cidade }))}
+            onBarClick={cidade => setFilters(f => ({
+              ...f,
+              cidades: f.cidades.includes(cidade) ? f.cidades.filter(c => c !== cidade) : [...f.cidades, cidade],
+            }))}
           />
         </ChartCard>
 
@@ -273,7 +275,7 @@ export default function CorreiosClient() {
                 const meses = getMesesPorAno(ano);
                 return meses.length > 0 ? Math.max(...meses) : null;
               })();
-              setFilters(f => ({ ...f, ano, mes }));
+              setFilters(f => ({ ...f, anos: [ano], mes }));
             }}
           />
         </ChartCard>

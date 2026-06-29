@@ -40,7 +40,7 @@ export interface CorreiosKpis {
 }
 
 export interface CorreiosFilters {
-  ano:    number | null;
-  mes:    number | null;
-  cidade: string | null;
+  anos:    number[];
+  mes:     number | null;
+  cidades: string[];
 }

@@ -19,24 +19,26 @@ function parseDate(s: string | null): Date | null {
   return null;
 }
 
+function matchAlerta(r: ContratoRecord, alerta: string): boolean {
+  if (r.situacao !== 'Ativo') return false;
+  const dt   = parseDate(r.vigenciaTermino);
+  const dias = dt ? Math.round((dt.getTime() - TODAY.getTime()) / 86_400_000) : null;
+  switch (alerta) {
+    case 'expirado':   return dias !== null && dias < 0;
+    case 'vencendo30': return dias !== null && dias >= 0 && dias <= 30;
+    case 'vencendo60': return dias !== null && dias >= 0 && dias <= 60;
+    case 'vencendo90': return dias !== null && dias >= 0 && dias <= 90;
+    case 'vigente':    return dias === null || dias >= 0;
+    default:           return false;
+  }
+}
+
 export function getContratos(filters: ContratoFilters): ContratoRecord[] {
   let result = registros;
-  if (filters.situacao      != null) result = result.filter(r => r.situacao      === filters.situacao);
-  if (filters.anoPublicacao != null) result = result.filter(r => r.anoPublicacao === filters.anoPublicacao);
-  if (filters.alertaVencimento != null) {
-    result = result.filter(r => {
-      if (r.situacao !== 'Ativo') return false;
-      const dt   = parseDate(r.vigenciaTermino);
-      const dias = dt ? Math.round((dt.getTime() - TODAY.getTime()) / 86_400_000) : null;
-      switch (filters.alertaVencimento) {
-        case 'expirado':   return dias !== null && dias < 0;
-        case 'vencendo30': return dias !== null && dias >= 0 && dias <= 30;
-        case 'vencendo60': return dias !== null && dias >= 0 && dias <= 60;
-        case 'vencendo90': return dias !== null && dias >= 0 && dias <= 90;
-        case 'vigente':    return dias === null || dias >= 0;
-        default:           return true;
-      }
-    });
+  if (filters.situacoes.length      > 0) result = result.filter(r => filters.situacoes.includes(r.situacao));
+  if (filters.anoPublicacoes.length > 0) result = result.filter(r => r.anoPublicacao != null && filters.anoPublicacoes.includes(r.anoPublicacao));
+  if (filters.alertasVencimento.length > 0) {
+    result = result.filter(r => filters.alertasVencimento.some(a => matchAlerta(r, a)));
   }
   return result;
 }

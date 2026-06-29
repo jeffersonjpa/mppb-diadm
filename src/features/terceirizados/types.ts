@@ -8,10 +8,10 @@ export interface TerceirizadoRecord extends DespesaBase {
 }
 
 export interface TerceirizadosFilters {
-  cidade: string | null;
-  unidade: string | null;
-  fornecedor: string | null;
-  cargo: string | null; // Adicionado para suporte ao filtro interativo via gráfico
+  cidades:     string[];
+  unidades:    string[];
+  fornecedores: string[];
+  cargos:      string[];
   mFrom: number;
   yFrom: number;
   mTo: number;

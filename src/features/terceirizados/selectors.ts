@@ -9,10 +9,10 @@ export function getFilteredRecords(
 
   return records.filter(r => {
     const idx = r.ano * 12 + (r.mes - 1);
-    if (filters.cidade && r.cidade !== filters.cidade) return false;
-    if (filters.unidade && r.unidade !== filters.unidade) return false;
-    if (filters.fornecedor && r.fornecedor !== filters.fornecedor) return false;
-    if (filters.cargo && r.cargo !== filters.cargo) return false;
+    if (filters.cidades.length      > 0 && !filters.cidades.includes(r.cidade))           return false;
+    if (filters.unidades.length     > 0 && !filters.unidades.includes(r.unidade))         return false;
+    if (filters.fornecedores.length > 0 && !filters.fornecedores.includes(r.fornecedor))  return false;
+    if (filters.cargos.length       > 0 && !filters.cargos.includes(r.cargo))             return false;
     return idx >= from && idx <= to;
   });
 }
@@ -77,10 +77,10 @@ export function computeKpis(
     // Filtra no banco completo aplicando os mesmos filtros do módulo, exceto o período
     const prevMonthRecs = allRecords.filter(r => {
       if (r.ano !== prevAno || r.mes !== prevMes) return false;
-      if (filters.cidade && r.cidade !== filters.cidade) return false;
-      if (filters.unidade && r.unidade !== filters.unidade) return false;
-      if (filters.fornecedor && r.fornecedor !== filters.fornecedor) return false;
-      if (filters.cargo && r.cargo !== filters.cargo) return false;
+      if (filters.cidades.length      > 0 && !filters.cidades.includes(r.cidade))           return false;
+      if (filters.unidades.length     > 0 && !filters.unidades.includes(r.unidade))         return false;
+      if (filters.fornecedores.length > 0 && !filters.fornecedores.includes(r.fornecedor))  return false;
+      if (filters.cargos.length       > 0 && !filters.cargos.includes(r.cargo))             return false;
       return true;
     });
 

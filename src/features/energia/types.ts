@@ -50,7 +50,7 @@ export interface EnergiaKpis {
 }
 
 export interface EnergiaFilters {
-  ano:      number | null;
+  anos:     number[];
   mes:      number | null;
   cidades:  string[];
   unidades: string[];

@@ -19,10 +19,10 @@ export function getMesesPorAno(ano: number): number[] {
 
 export function getRegistros(filters: TerceirizadosFilters): TerceirizadoRecord[] {
   let result = registros;
-  if (filters.cidade    != null) result = result.filter(r => r.cidade === filters.cidade);
-  if (filters.unidade   != null) result = result.filter(r => r.unidade === filters.unidade);
-  if (filters.fornecedor != null) result = result.filter(r => r.fornecedor === filters.fornecedor);
-  if (filters.cargo     != null) result = result.filter(r => r.cargo === filters.cargo);
+  if (filters.cidades.length      > 0) result = result.filter(r => filters.cidades.includes(r.cidade));
+  if (filters.unidades.length     > 0) result = result.filter(r => filters.unidades.includes(r.unidade));
+  if (filters.fornecedores.length > 0) result = result.filter(r => filters.fornecedores.includes(r.fornecedor));
+  if (filters.cargos.length       > 0) result = result.filter(r => filters.cargos.includes(r.cargo));
 
   const from = filters.yFrom * 12 + (filters.mFrom - 1);
   const to = filters.yTo * 12 + (filters.mTo - 1);

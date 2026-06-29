@@ -14,9 +14,9 @@ export function getMesesPorAno(ano: number): number[] {
 
 export function getRegistros(filters: AguaFilters): AguaRecord[] {
   let result = registros;
-  if (filters.ano    != null) result = result.filter(r => r.ano    === filters.ano);
-  if (filters.mes    != null) result = result.filter(r => r.mes    === filters.mes);
-  if (filters.cidade != null) result = result.filter(r => r.cidade === filters.cidade);
+  if (filters.anos.length    > 0) result = result.filter(r => filters.anos.includes(r.ano));
+  if (filters.mes            != null) result = result.filter(r => r.mes    === filters.mes);
+  if (filters.cidades.length > 0) result = result.filter(r => filters.cidades.includes(r.cidade));
   return result;
 }
 

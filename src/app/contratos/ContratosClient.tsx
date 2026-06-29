@@ -6,7 +6,7 @@ import { FileText, AlertTriangle, Clock, ShieldAlert } from 'lucide-react';
 import KpiCard        from '@/components/kpi/KpiCard';
 import AiInsight      from '@/components/ai/AiInsight';
 import FilterBar      from '@/components/filters/FilterBar';
-import SelectFilter   from '@/components/filters/SelectFilter';
+import MultiSelectFilter from '@/components/filters/MultiSelectFilter';
 import ChartCard      from '@/components/charts/ChartCard';
 import BarByDimension from '@/components/charts/BarByDimension';
 import DataTable, { type Column } from '@/components/table/DataTable';
@@ -124,15 +124,15 @@ const COLUMNS: Column<ContratoRecord>[] = [
 /* ── Componente principal ──────────────────────────────────────── */
 export default function ContratosClient() {
   const [filters, setFilters] = useState<ContratoFilters>({
-    situacao:         null,
-    anoPublicacao:    null,
-    alertaVencimento: null,
+    situacoes:         [],
+    anoPublicacoes:    [],
+    alertasVencimento: [],
   });
 
   const activeCount =
-    (filters.situacao         != null ? 1 : 0) +
-    (filters.anoPublicacao    != null ? 1 : 0) +
-    (filters.alertaVencimento != null ? 1 : 0);
+    (filters.situacoes.length         > 0 ? 1 : 0) +
+    (filters.anoPublicacoes.length    > 0 ? 1 : 0) +
+    (filters.alertasVencimento.length > 0 ? 1 : 0);
 
   const records = useMemo(() => getContratos(filters), [filters]);
 
@@ -153,9 +153,9 @@ export default function ContratosClient() {
   ];
 
   const periodoLabel = [
-    filters.situacao         ? filters.situacao                                     : null,
-    filters.alertaVencimento ? ALERTA_OPTIONS.find(o => o.value === filters.alertaVencimento)?.label : null,
-    filters.anoPublicacao    ? String(filters.anoPublicacao)                        : null,
+    filters.situacoes.length         > 0 ? filters.situacoes.join(', ')                                                                               : null,
+    filters.alertasVencimento.length > 0 ? filters.alertasVencimento.map(v => ALERTA_OPTIONS.find(o => o.value === v)?.label ?? v).join(', ') : null,
+    filters.anoPublicacoes.length    > 0 ? filters.anoPublicacoes.join(', ')                                                                          : null,
   ].filter(Boolean).join(' · ') || 'Todos os contratos';
 
   const aiPayload = useMemo(() => ({
@@ -215,28 +215,31 @@ export default function ContratosClient() {
       {/* ── Filtros ──────────────────────────────────────────────── */}
       <FilterBar
         activeCount={activeCount}
-        onClear={() => setFilters({ situacao: null, anoPublicacao: null, alertaVencimento: null })}
+        onClear={() => setFilters({ situacoes: [], anoPublicacoes: [], alertasVencimento: [] })}
       >
-        <SelectFilter
+        <MultiSelectFilter
           label="Situação"
-          value={filters.situacao}
+          values={filters.situacoes}
           options={SITUACAO_OPTIONS}
-          onChange={v => setFilters(f => ({ ...f, situacao: v }))}
+          onChange={v => setFilters(f => ({ ...f, situacoes: v }))}
           placeholder="Todas"
+          searchable={false}
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Vigência"
-          value={filters.alertaVencimento}
+          values={filters.alertasVencimento}
           options={ALERTA_OPTIONS}
-          onChange={v => setFilters(f => ({ ...f, alertaVencimento: v as 'expirado' | 'vigente' | null }))}
+          onChange={v => setFilters(f => ({ ...f, alertasVencimento: v }))}
           placeholder="Todas"
+          searchable={false}
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Ano de Publicação"
-          value={filters.anoPublicacao}
-          options={ANOS_OPTIONS}
-          onChange={v => setFilters(f => ({ ...f, anoPublicacao: v ? parseInt(v) : null }))}
+          values={filters.anoPublicacoes.map(String)}
+          options={ANOS_OPTIONS.map(o => ({ ...o, value: String(o.value) }))}
+          onChange={v => setFilters(f => ({ ...f, anoPublicacoes: v.map(Number) }))}
           placeholder="Todos"
+          searchable={false}
         />
       </FilterBar>
 

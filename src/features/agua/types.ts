@@ -44,7 +44,7 @@ export interface AguaKpis {
 }
 
 export interface AguaFilters {
-  ano:    number | null;
-  mes:    number | null;
-  cidade: string | null;
+  anos:    number[];
+  mes:     number | null;
+  cidades: string[];
 }

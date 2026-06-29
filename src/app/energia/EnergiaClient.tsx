@@ -106,26 +106,26 @@ export default function EnergiaClient() {
   const [cidadeView, setCidadeView] = useState<'cidades' | 'eficiencia'>('cidades');
 
   const [filters, setFilters] = useState<EnergiaFilters>({
-    ano:      DEFAULT_ANO,
+    anos:     [DEFAULT_ANO],
     mes:      DEFAULT_MES,
     cidades:  [],
     unidades: [],
   });
 
-  // Opções de mês dependem do ano selecionado
-  const mesesDisponiveis = useMemo(
-    () => filters.ano != null ? getMesesPorAno(filters.ano) : [],
-    [filters.ano]
-  );
+  // Opções de mês: união dos meses disponíveis nos anos selecionados
+  const mesesDisponiveis = useMemo(() => {
+    if (filters.anos.length === 0) return [...new Set(ANOS.flatMap(a => getMesesPorAno(a)))].sort((a, b) => a - b);
+    return [...new Set(filters.anos.flatMap(a => getMesesPorAno(a)))].sort((a, b) => a - b);
+  }, [filters.anos]);
 
-  const ANOS_OPTIONS    = ANOS.map(a => ({ value: a, label: String(a) }));
+  const ANOS_OPTIONS    = ANOS.map(a => ({ value: String(a), label: String(a) }));
   const MESES_OPTIONS   = mesesDisponiveis.map(m => ({ value: m, label: MESES_FULL[m - 1] }));
   const CIDADE_OPTIONS  = CIDADES.map(c => ({ value: c, label: c }));
   const UNIDADE_OPTIONS = UNIDADES.map(u => ({ value: u, label: u }));
 
   // Conta quantos filtros estão fora do padrão
   const activeCount =
-    (filters.ano             != null ? 1 : 0) +
+    (filters.anos.length      > 0 ? 1 : 0) +
     (filters.mes             != null ? 1 : 0) +
     (filters.cidades.length   > 0    ? 1 : 0) +
     (filters.unidades.length  > 0    ? 1 : 0);
@@ -154,7 +154,7 @@ export default function EnergiaClient() {
 
     const prevMonthRecs = getRegistros({
       ...filters,
-      ano: prevAno,
+      anos: [prevAno],
       mes: prevMes,
     });
     const prevTotal = prevMonthRecs.reduce((s, r) => s + r.valorTotal, 0);
@@ -167,13 +167,13 @@ export default function EnergiaClient() {
   }, [records, filters]);
 
   const kpis = useMemo(() => {
-    const isSingleMonth = filters.ano !== null && filters.mes !== null;
+    const isSingleMonth = filters.anos.length === 1 && filters.mes !== null;
     if (isSingleMonth) {
       return computeKpis(records, latestAndPrev.prev);
     } else {
       return computeKpis(records, latestAndPrev.prev, latestAndPrev.latest);
     }
-  }, [records, latestAndPrev, filters.ano, filters.mes]);
+  }, [records, latestAndPrev, filters.anos, filters.mes]);
 
   /* Gráfico de barras — cidades */
   const topCidades = useMemo(
@@ -225,8 +225,8 @@ export default function EnergiaClient() {
 
   /* Subtítulo do período */
   const periodoLabel = [
-    filters.ano  ? String(filters.ano)         : 'Todos os anos',
-    filters.mes  ? MESES_FULL[filters.mes - 1] : 'Todos os meses',
+    filters.anos.length     > 0 ? filters.anos.join(', ')         : 'Todos os anos',
+    filters.mes            != null ? MESES_FULL[filters.mes - 1]  : 'Todos os meses',
     filters.cidades.length  === 1 ? filters.cidades[0]  : filters.cidades.length  > 1 ? `${filters.cidades.length} cidades`   : null,
     filters.unidades.length === 1 ? filters.unidades[0] : filters.unidades.length > 1 ? `${filters.unidades.length} unidades` : null,
   ].filter(Boolean).join(' · ');
@@ -234,14 +234,6 @@ export default function EnergiaClient() {
   const custoKwhStr = kpis.custoPorKwh > 0
     ? `R$ ${kpis.custoPorKwh.toLocaleString('pt-BR', { minimumFractionDigits: 4 })}/kWh`
     : '—';
-
-  function handleAnoChange(v: string | null) {
-    const newAno = v ? parseInt(v) : null;
-    // Reseta o mês para o mais recente do novo ano
-    const meses  = newAno ? getMesesPorAno(newAno) : [];
-    const newMes = meses.length > 0 ? Math.max(...meses) : null;
-    setFilters(f => ({ ...f, ano: newAno, mes: newMes }));
-  }
 
   return (
     <div className="space-y-5">
@@ -287,14 +279,15 @@ export default function EnergiaClient() {
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar
         activeCount={activeCount}
-        onClear={() => setFilters({ ano: null, mes: null, cidades: [], unidades: [] })}
+        onClear={() => setFilters({ anos: [], mes: null, cidades: [], unidades: [] })}
       >
-        <SelectFilter
+        <MultiSelectFilter
           label="Ano"
-          value={filters.ano}
+          values={filters.anos.map(String)}
           options={ANOS_OPTIONS}
-          onChange={handleAnoChange}
+          onChange={v => setFilters(f => ({ ...f, anos: v.map(Number) }))}
           placeholder="Todos"
+          searchable={false}
         />
         <SelectFilter
           label="Mês"
@@ -397,7 +390,7 @@ export default function EnergiaClient() {
                 const meses = getMesesPorAno(ano);
                 return meses.length > 0 ? Math.max(...meses) : null;
               })();
-              setFilters(f => ({ ...f, ano, mes }));
+              setFilters(f => ({ ...f, anos: [ano], mes }));
             }}
           />
         </ChartCard>

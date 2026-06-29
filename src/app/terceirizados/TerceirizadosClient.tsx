@@ -6,7 +6,7 @@ import { Users, Package, Activity } from 'lucide-react';
 import KpiCard       from '@/components/kpi/KpiCard';
 import AiInsight    from '@/components/ai/AiInsight';
 import FilterBar     from '@/components/filters/FilterBar';
-import SelectFilter  from '@/components/filters/SelectFilter';
+import MultiSelectFilter from '@/components/filters/MultiSelectFilter';
 import PeriodRange   from '@/components/filters/PeriodRange';
 import ChartCard     from '@/components/charts/ChartCard';
 import BarByDimension from '@/components/charts/BarByDimension';
@@ -91,10 +91,13 @@ type ToggleView = 'POR CARGO' | 'POR UNIDADE' | 'POR FORNECEDOR' | 'POR TERCEIRI
 export default function TerceirizadosClient() {
   const {
     filters,
-    setCidade,
-    setUnidade,
-    setFornecedor,
-    setCargo,
+    setCidades,
+    setUnidades,
+    setFornecedores,
+    setCargos,
+    toggleCargo,
+    toggleUnidade,
+    toggleFornecedor,
     setPeriod,
     clearFilters,
     activeCount,
@@ -177,24 +180,20 @@ export default function TerceirizadosClient() {
   // Subtítulo do período descritivo
   const periodoLabel = useMemo(() => {
     const parts = [
-      filters.cidade || null,
-      filters.unidade || null,
-      filters.fornecedor || null,
-      filters.cargo || null,
+      filters.cidades.length      > 0 ? filters.cidades.join(', ')      : null,
+      filters.unidades.length     > 0 ? filters.unidades.join(', ')     : null,
+      filters.fornecedores.length > 0 ? filters.fornecedores.join(', ') : null,
+      filters.cargos.length       > 0 ? filters.cargos.join(', ')       : null,
       `${MESES_SHORT[filters.mFrom - 1]}/${filters.yFrom} – ${MESES_SHORT[filters.mTo - 1]}/${filters.yTo}`,
     ].filter(Boolean);
     return parts.join(' · ');
   }, [filters]);
 
-  // Manipulador de clique nas barras do gráfico
+  // Manipulador de clique nas barras do gráfico (toggle)
   function handleBarClick(label: string) {
-    if (toggleView === 'POR CARGO') {
-      setCargo(label);
-    } else if (toggleView === 'POR UNIDADE') {
-      setUnidade(label);
-    } else if (toggleView === 'POR FORNECEDOR') {
-      setFornecedor(label);
-    }
+    if (toggleView === 'POR CARGO')        toggleCargo(label);
+    else if (toggleView === 'POR UNIDADE')      toggleUnidade(label);
+    else if (toggleView === 'POR FORNECEDOR')   toggleFornecedor(label);
   }
 
   // Manipulador de clique nos pontos da linha temporal
@@ -250,32 +249,32 @@ export default function TerceirizadosClient() {
 
       {/* ── Filtros ───────────────────────────────────────────────── */}
       <FilterBar activeCount={activeCount} onClear={clearFilters}>
-        <SelectFilter
+        <MultiSelectFilter
           label="Cidade"
-          value={filters.cidade}
+          values={filters.cidades}
           options={CIDADE_OPTIONS}
-          onChange={setCidade}
+          onChange={setCidades}
           placeholder="Todos"
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Unidade"
-          value={filters.unidade}
+          values={filters.unidades}
           options={UNIDADE_OPTIONS}
-          onChange={setUnidade}
+          onChange={setUnidades}
           placeholder="Todos"
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Fornecedor"
-          value={filters.fornecedor}
+          values={filters.fornecedores}
           options={FORNECEDOR_OPTIONS}
-          onChange={setFornecedor}
+          onChange={setFornecedores}
           placeholder="Todos"
         />
-        <SelectFilter
+        <MultiSelectFilter
           label="Cargo"
-          value={filters.cargo}
+          values={filters.cargos}
           options={[...new Set(baseRecords.map((r) => r.cargo))].sort().map((c) => ({ value: c, label: c }))}
-          onChange={setCargo}
+          onChange={setCargos}
           placeholder="Todos"
         />
         <PeriodRange

@@ -4,34 +4,43 @@ import { useState, useCallback, useMemo } from 'react';
 import type { TerceirizadosFilters } from './types';
 
 export const DEFAULT_FILTERS: TerceirizadosFilters = {
-  cidade: null,
-  unidade: null,
-  fornecedor: null,
-  cargo: null,
+  cidades:      [],
+  unidades:     [],
+  fornecedores: [],
+  cargos:       [],
   mFrom: 5,
   yFrom: 2025,
   mTo: 2,
   yTo: 2026,
 };
 
+function toggle(arr: string[], value: string): string[] {
+  return arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value];
+}
+
 export function useTerceirizadosFilters() {
   const [filters, setFilters] = useState<TerceirizadosFilters>(DEFAULT_FILTERS);
 
-  const setCidade = useCallback((cidade: string | null) => {
-    setFilters(f => ({ ...f, cidade }));
+  const setCidades     = useCallback((cidades: string[]) => {
+    setFilters(f => ({ ...f, cidades }));
   }, []);
 
-  const setUnidade = useCallback((unidade: string | null) => {
-    setFilters(f => ({ ...f, unidade }));
+  const setUnidades    = useCallback((unidades: string[]) => {
+    setFilters(f => ({ ...f, unidades }));
   }, []);
 
-  const setFornecedor = useCallback((fornecedor: string | null) => {
-    setFilters(f => ({ ...f, fornecedor }));
+  const setFornecedores = useCallback((fornecedores: string[]) => {
+    setFilters(f => ({ ...f, fornecedores }));
   }, []);
 
-  const setCargo = useCallback((cargo: string | null) => {
-    setFilters(f => ({ ...f, cargo }));
+  const setCargos      = useCallback((cargos: string[]) => {
+    setFilters(f => ({ ...f, cargos }));
   }, []);
+
+  const toggleCidade    = useCallback((v: string) => setFilters(f => ({ ...f, cidades:      toggle(f.cidades, v)      })), []);
+  const toggleUnidade   = useCallback((v: string) => setFilters(f => ({ ...f, unidades:     toggle(f.unidades, v)     })), []);
+  const toggleFornecedor = useCallback((v: string) => setFilters(f => ({ ...f, fornecedores: toggle(f.fornecedores, v) })), []);
+  const toggleCargo     = useCallback((v: string) => setFilters(f => ({ ...f, cargos:       toggle(f.cargos, v)       })), []);
 
   const setPeriod = useCallback((updates: Partial<Pick<TerceirizadosFilters, 'mFrom' | 'yFrom' | 'mTo' | 'yTo'>>) => {
     setFilters(prev => {
@@ -39,7 +48,6 @@ export function useTerceirizadosFilters() {
       const fromVal = next.yFrom * 12 + (next.mFrom - 1);
       const toVal = next.yTo * 12 + (next.mTo - 1);
       if (fromVal > toVal) {
-        // Autocorrige invertendo a ordem se o fim for anterior ao início
         return {
           ...next,
           mFrom: prev.mTo,
@@ -58,25 +66,29 @@ export function useTerceirizadosFilters() {
 
   const activeCount = useMemo(() => {
     let count = 0;
-    if (filters.cidade !== null) count++;
-    if (filters.unidade !== null) count++;
-    if (filters.fornecedor !== null) count++;
-    if (filters.cargo !== null) count++;
+    if (filters.cidades.length      > 0) count++;
+    if (filters.unidades.length     > 0) count++;
+    if (filters.fornecedores.length > 0) count++;
+    if (filters.cargos.length       > 0) count++;
     const isPeriodDefault =
       filters.mFrom === DEFAULT_FILTERS.mFrom &&
       filters.yFrom === DEFAULT_FILTERS.yFrom &&
-      filters.mTo === DEFAULT_FILTERS.mTo &&
-      filters.yTo === DEFAULT_FILTERS.yTo;
+      filters.mTo   === DEFAULT_FILTERS.mTo   &&
+      filters.yTo   === DEFAULT_FILTERS.yTo;
     if (!isPeriodDefault) count++;
     return count;
   }, [filters]);
 
   return {
     filters,
-    setCidade,
-    setUnidade,
-    setFornecedor,
-    setCargo,
+    setCidades,
+    setUnidades,
+    setFornecedores,
+    setCargos,
+    toggleCidade,
+    toggleUnidade,
+    toggleFornecedor,
+    toggleCargo,
     setPeriod,
     clearFilters,
     activeCount,
