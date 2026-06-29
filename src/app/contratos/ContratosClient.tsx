@@ -124,13 +124,15 @@ const COLUMNS: Column<ContratoRecord>[] = [
 /* ── Componente principal ──────────────────────────────────────── */
 export default function ContratosClient() {
   const [filters, setFilters] = useState<ContratoFilters>({
-    situacao:      null,
-    anoPublicacao: null,
+    situacao:         null,
+    anoPublicacao:    null,
+    alertaVencimento: null,
   });
 
   const activeCount =
-    (filters.situacao      != null ? 1 : 0) +
-    (filters.anoPublicacao != null ? 1 : 0);
+    (filters.situacao         != null ? 1 : 0) +
+    (filters.anoPublicacao    != null ? 1 : 0) +
+    (filters.alertaVencimento != null ? 1 : 0);
 
   const records = useMemo(() => getContratos(filters), [filters]);
 
@@ -142,10 +144,15 @@ export default function ContratosClient() {
 
   const ANOS_OPTIONS     = ANOS_PUBLICACAO.map(a => ({ value: a, label: String(a) })).reverse();
   const SITUACAO_OPTIONS = SITUACOES.map(s => ({ value: s, label: s }));
+  const ALERTA_OPTIONS   = [
+    { value: 'expirado', label: 'Expirado (Ativo)' },
+    { value: 'vigente',  label: 'Vigente (Ativo)'  },
+  ];
 
   const periodoLabel = [
-    filters.situacao      ? filters.situacao           : null,
-    filters.anoPublicacao ? String(filters.anoPublicacao) : null,
+    filters.situacao         ? filters.situacao                                     : null,
+    filters.alertaVencimento ? ALERTA_OPTIONS.find(o => o.value === filters.alertaVencimento)?.label : null,
+    filters.anoPublicacao    ? String(filters.anoPublicacao)                        : null,
   ].filter(Boolean).join(' · ') || 'Todos os contratos';
 
   const aiPayload = useMemo(() => ({
@@ -205,13 +212,20 @@ export default function ContratosClient() {
       {/* ── Filtros ──────────────────────────────────────────────── */}
       <FilterBar
         activeCount={activeCount}
-        onClear={() => setFilters({ situacao: null, anoPublicacao: null })}
+        onClear={() => setFilters({ situacao: null, anoPublicacao: null, alertaVencimento: null })}
       >
         <SelectFilter
           label="Situação"
           value={filters.situacao}
           options={SITUACAO_OPTIONS}
           onChange={v => setFilters(f => ({ ...f, situacao: v }))}
+          placeholder="Todas"
+        />
+        <SelectFilter
+          label="Vigência"
+          value={filters.alertaVencimento}
+          options={ALERTA_OPTIONS}
+          onChange={v => setFilters(f => ({ ...f, alertaVencimento: v as 'expirado' | 'vigente' | null }))}
           placeholder="Todas"
         />
         <SelectFilter

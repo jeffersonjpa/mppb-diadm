@@ -43,6 +43,7 @@ export interface ModalidadeSummary {
 }
 
 export interface ContratoFilters {
-  situacao:      string | null;
-  anoPublicacao: number | null;
+  situacao:         string | null;
+  anoPublicacao:    number | null;
+  alertaVencimento: 'expirado' | 'vigente' | null;
 }
