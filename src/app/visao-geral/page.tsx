@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import AiInsight from '@/components/ai/AiInsight';
+import ComparativoPanel from './ComparativoPanel';
 import {
-  Users, Zap, Droplets, Mail, Phone,
+  Users, Zap, Droplets, Mail,
   ArrowRight, TrendingUp,
 } from 'lucide-react';
 import { formatBRL, formatMonthYear } from '@/lib/format';
@@ -105,11 +106,6 @@ export default function VisaoGeralPage() {
       variacao: correiosResumo?.variacao,
       subtitulo: correiosResumo ? `${formatMonthYear(correiosResumo.mes, correiosResumo.ano)} · ${correiosResumo.totalObjetos} objetos` : 'Em integração',
     },
-    {
-      id: 'telefonia', href: '/telefonia', label: 'Telefonia',
-      icon: Phone, ativo: false,
-      subtitulo: 'Em integração',
-    },
   ];
 
   const totalMonitorado = modulos
@@ -194,6 +190,17 @@ export default function VisaoGeralPage() {
             <ModuleCardItem key={mod.id} {...mod} />
           ))}
         </div>
+      </div>
+
+      {/* ── Análise Comparativa por Unidade ──────────────────────── */}
+      <div>
+        <h2 className="text-[13px] font-bold text-mp-muted uppercase tracking-[0.5px] mb-1">
+          Análise Comparativa por Unidade
+        </h2>
+        <p className="text-[12px] text-mp-muted mb-4">
+          Custos de energia, água e correios por promotoria / unidade do MPPB
+        </p>
+        <ComparativoPanel />
       </div>
     </div>
   );
