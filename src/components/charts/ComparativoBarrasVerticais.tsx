@@ -18,12 +18,9 @@ const SERIES_CONFIG: { key: Modulo; name: string; color: string }[] = [
   { key: 'correios', name: 'Correios', color: '#C2410C' },
 ];
 
+// data must arrive sorted descending; inverse:true on yAxis puts index 0 at top
 export default function ComparativoBarrasVerticais({ data, modulos, height = 420 }: Props) {
   const labels = data.map(d => d.label);
-
-  const initialEndPct = data.length > 0
-    ? Math.min(100, Math.round((20 / data.length) * 100))
-    : 100;
 
   const option = {
     tooltip: {
@@ -51,44 +48,8 @@ export default function ComparativoBarrasVerticais({ data, modulos, height = 420
       itemHeight: 8,
       itemWidth: 20,
     },
-    grid: {
-      top: 36,
-      right: 16,
-      bottom: 56,
-      left: 16,
-      containLabel: true,
-    },
-    dataZoom: [
-      {
-        type: 'slider',
-        xAxisIndex: 0,
-        bottom: 8,
-        height: 18,
-        start: 0,
-        end: initialEndPct,
-        borderColor: '#ECEEF1',
-        fillerColor: 'rgba(29,82,136,0.08)',
-        handleStyle: { color: '#1D5288' },
-        moveHandleStyle: { color: '#1D5288' },
-        textStyle: { color: '#6B7480', fontSize: 10 },
-        showDetail: false,
-      },
-    ],
+    grid: { top: 36, right: 24, bottom: 8, left: 8, containLabel: true },
     xAxis: {
-      type: 'category',
-      data: labels,
-      axisLine: { show: false },
-      axisTick: { show: false },
-      axisLabel: {
-        color: '#6B7480',
-        fontSize: 10,
-        rotate: 35,
-        interval: 0,
-        overflow: 'truncate',
-        width: 100,
-      },
-    },
-    yAxis: {
       type: 'value',
       axisLine: { show: false },
       axisTick: { show: false },
@@ -99,14 +60,27 @@ export default function ComparativoBarrasVerticais({ data, modulos, height = 420
       },
       splitLine: { lineStyle: { color: '#ECEEF1', type: 'dashed' } },
     },
+    yAxis: {
+      type: 'category',
+      data: labels,
+      inverse: true,
+      axisLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: {
+        color: '#6B7480',
+        fontSize: 11,
+        overflow: 'truncate',
+        width: 180,
+      },
+    },
     series: SERIES_CONFIG
       .filter(s => modulos.includes(s.key))
       .map(s => ({
         name: s.name,
         type: 'bar',
         data: data.map(d => d[s.key] || null),
-        itemStyle: { color: s.color, borderRadius: [3, 3, 0, 0] },
-        barMaxWidth: 22,
+        itemStyle: { color: s.color, borderRadius: [0, 3, 3, 0] },
+        barMaxWidth: 20,
         emphasis: { itemStyle: { opacity: 0.85 } },
       })),
     animationDuration: 500,
