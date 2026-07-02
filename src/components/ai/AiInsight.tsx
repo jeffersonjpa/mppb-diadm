@@ -56,7 +56,8 @@ export default function AiInsight({ endpoint, payload, mockText }: AiInsightProp
       .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
       .then(data => {
         if (!cancelled) {
-          if (data.text) setText(data.text);
+          if (data.disabled) setLoading(false);
+          else if (data.text) setText(data.text);
           else setError(true);
         }
       })
@@ -65,6 +66,8 @@ export default function AiInsight({ endpoint, payload, mockText }: AiInsightProp
 
     return () => { cancelled = true; };
   }, [payloadKey, endpoint, mockText, payload]);
+
+  if (!loading && !text && !error) return null;
 
   if (error) return (
     <div className="bg-mp-tint border border-mp-primary/20 rounded-mp-card px-5 py-3 flex items-center gap-2">

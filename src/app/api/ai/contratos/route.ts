@@ -89,6 +89,8 @@ export async function POST(req: NextRequest) {
     const cached = readCache(key);
     if (cached) return NextResponse.json({ text: cached, cached: true });
 
+    if (process.env.AI_ENABLED !== 'true') return NextResponse.json({ disabled: true });
+
     const apiKey = process.env.GPT_API_KEY;
     if (!apiKey) return NextResponse.json({ error: 'GPT_API_KEY not set' }, { status: 500 });
 
