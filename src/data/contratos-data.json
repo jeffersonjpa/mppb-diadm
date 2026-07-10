@@ -60,7 +60,7 @@
       "situacao": "Ativo",
       "itemFornecido": "Locação de imóvel",
       "valorTotalContrato": 17881.2,
-      "contratado": "LARA SÉPHORA GUEDES DE LIRA / MARIA SELMA QUEIROZ DO NASCIMENTO / JOSÉ CARLOS SOBRAL DO NASCIMENTO",
+      "contratado": "4º TA - Transferência de Locadora para Maria Selma Queiroz do Nascimento. LARA SÉPHORA GUEDES DE LIRA / MARIA SELMA QUEIROZ DO NASCIMENTO / JOSÉ CARLOS SOBRAL DO NASCIMENTO",
       "cnpjCpf": "078.XXX.XXX-84 e 873.XXX.XXX-68",
       "numAditivos": 10,
       "numApostilamentos": 1,
@@ -146,10 +146,10 @@
       "numEdital": "Dispensa de Licitação nº 03/2018",
       "modalidade": "Dispensa",
       "vigenciaInicio": "11/04/2018",
-      "vigenciaTermino": null,
+      "vigenciaTermino": "-",
       "situacao": "Concluído",
       "itemFornecido": "Serviço",
-      "valorTotalContrato": null,
+      "valorTotalContrato": 0,
       "contratado": "FUNDAÇÃO CARLOS CHAGAS",
       "cnpjCpf": "60.555.513/0001-90",
       "numAditivos": 0,
@@ -1137,7 +1137,7 @@
       "modalidade": "Dispensa",
       "vigenciaInicio": "27/04/2021",
       "vigenciaTermino": "27/04/2026",
-      "situacao": "Ativo",
+      "situacao": "Concluído",
       "itemFornecido": "Serviços de linha de comunicação de dados e acesso ao Sistema Corporativo SIAF.",
       "valorTotalContrato": 42600.0,
       "contratado": "COMPANHIA DE PROCESSAMENTO DE DADOS DA PARAÍBA – CODATA",
@@ -2450,13 +2450,13 @@
       "numEdital": "Pregão Eletrônico nº 011/2022",
       "modalidade": "Pregão Eletrônico",
       "vigenciaInicio": "17/08/2022",
-      "vigenciaTermino": "17/08/2026",
+      "vigenciaTermino": "16/08/2027",
       "situacao": "Ativo",
       "itemFornecido": "Manutenção de grupo gerador",
       "valorTotalContrato": 11500.0,
       "contratado": "URBIETA DE ARAÚJO MACENA",
       "cnpjCpf": "12.620.902/0001-00",
-      "numAditivos": 3,
+      "numAditivos": 4,
       "numApostilamentos": 0,
       "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4"
     },
@@ -2885,12 +2885,12 @@
       "vigenciaTermino": "17/08/2023",
       "situacao": "Concluído",
       "itemFornecido": "Organização de Concurso Público",
-      "valorTotalContrato": null,
+      "valorTotalContrato": 0,
       "contratado": "FUNDAÇÃO CARLOS CHAGAS",
       "cnpjCpf": "60.555.513/0001-90",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Jonatha Vieira de SousaMat.: 7013604"
+      "fiscais": "Jonatha Vieira de Sousa Mat.: 7013604"
     },
     {
       "numContrato": "002/2023",
@@ -2926,7 +2926,7 @@
       "cnpjCpf": "19.447.850/0001-61",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Daniel Lins Batista  GuerraMat.:7013302"
+      "fiscais": "Daniel Lins Batista Guerra Mat.:7013302"
     },
     {
       "numContrato": "003/2023",
@@ -2944,7 +2944,7 @@
       "cnpjCpf": "00.000.000/0001-91",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Ubirajara Coutinho LucenaMat.:7013302"
+      "fiscais": "Ubirajara Coutinho Lucena Mat.:7013302"
     },
     {
       "numContrato": "004/2023",
@@ -2962,7 +2962,7 @@
       "cnpjCpf": "12.670.936/0001-09",
       "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "Silvana Maia  Peixoto de CarvalhoMat.: 7013892"
+      "fiscais": "Silvana Maia Peixoto de Carvalho Mat.: 7013892"
     },
     {
       "numContrato": "004/2023",
@@ -2980,7 +2980,7 @@
       "cnpjCpf": "00.630.985/0001-39",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Silvana Maia  Peixoto de CarvalhoMat.: 7013892"
+      "fiscais": "Silvana Maia Peixoto de Carvalho Mat.: 7013892"
     },
     {
       "numContrato": "005/2023",
@@ -2998,7 +2998,7 @@
       "cnpjCpf": "09.366.790/0001-06",
       "numAditivos": 3,
       "numApostilamentos": 0,
-      "fiscais": "Silvana Maia  Peixoto de CarvalhoMat.: 7013892"
+      "fiscais": "Silvana Maia Peixoto de Carvalho Mat.: 7013892"
     },
     {
       "numContrato": "005/2023",
@@ -3016,7 +3016,7 @@
       "cnpjCpf": "04.798.838/0001-23",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Silvana Maia  Peixoto de CarvalhoMat.: 7013892"
+      "fiscais": "Silvana Maia Peixoto de Carvalho Mat.: 7013892"
     },
     {
       "numContrato": "006/2023",
@@ -3052,7 +3052,7 @@
       "cnpjCpf": "02.604.394/001-12",
       "numAditivos": 3,
       "numApostilamentos": 0,
-      "fiscais": "Francisco  Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "007/2023",
@@ -3088,7 +3088,7 @@
       "cnpjCpf": "16.713.807/0001-01",
       "numAditivos": 3,
       "numApostilamentos": 2,
-      "fiscais": "Francisco  Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "008/2023",
@@ -3142,7 +3142,7 @@
       "cnpjCpf": "21.179.250/0001-00",
       "numAditivos": 3,
       "numApostilamentos": 1,
-      "fiscais": "ANA CARLA SOBREIRO LOPESMat.: 7013094DANIELLE ALBINO RAFAEL MATOSMat.: 7013663"
+      "fiscais": "ANA CARLA SOBREIRO LOPES Mat.: 7013094 DANIELLE ALBINO RAFAEL MATOS Mat.: 7013663"
     },
     {
       "numContrato": "010/2023",
@@ -3160,7 +3160,7 @@
       "cnpjCpf": "32.196.605/0001-96",
       "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "FELIPE SETTE CARNEIRO DE MORAISMat.: 7013159"
+      "fiscais": "FELIPE SETTE CARNEIRO DE MORAIS Mat.: 7013159"
     },
     {
       "numContrato": "010/2023",
@@ -3196,7 +3196,7 @@
       "cnpjCpf": "07.486.876/0001-39",
       "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "FELIPE SETTE CARNEIRO DE MORAISMat.: 7013159"
+      "fiscais": "FELIPE SETTE CARNEIRO DE MORAIS Mat.: 7013159"
     },
     {
       "numContrato": "011/2023",
@@ -3214,7 +3214,7 @@
       "cnpjCpf": "61.198.164/0001-60",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "FLÁVIO HENRIQUE LUCENAMat.:7013001"
+      "fiscais": "FLÁVIO HENRIQUE LUCENA Mat.:7013001"
     },
     {
       "numContrato": "012/2023",
@@ -3286,7 +3286,7 @@
       "cnpjCpf": "40.964.157/0001-51",
       "numAditivos": 2,
       "numApostilamentos": 2,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "014/2023",
@@ -3304,7 +3304,7 @@
       "cnpjCpf": "24.849.649/0001-40",
       "numAditivos": 2,
       "numApostilamentos": 2,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "015/2023",
@@ -3322,7 +3322,7 @@
       "cnpjCpf": "02.947.911/0001-56",
       "numAditivos": 2,
       "numApostilamentos": 2,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "015/2023",
@@ -3340,7 +3340,7 @@
       "cnpjCpf": "05.075.877/0001-65",
       "numAditivos": 0,
       "numApostilamentos": 1,
-      "fiscais": "Silvana Maia  Peixoto de CarvalhoMat.: 7013892"
+      "fiscais": "Silvana Maia Peixoto de Carvalho Mat.: 7013892"
     },
     {
       "numContrato": "016/2023",
@@ -3358,7 +3358,7 @@
       "cnpjCpf": "66.455.593/0001-99",
       "numAditivos": 0,
       "numApostilamentos": 1,
-      "fiscais": "Silvana Maia  Peixoto de CarvalhoMat.: 7013892"
+      "fiscais": "Silvana Maia Peixoto de Carvalho Mat.: 7013892"
     },
     {
       "numContrato": "016/2023",
@@ -3394,7 +3394,7 @@
       "cnpjCpf": "065.XXX.XXX-25",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "SIilvana Cantalice RamosMat.:7000448"
+      "fiscais": "SIilvana Cantalice Ramos Mat.:7000448"
     },
     {
       "numContrato": "017/2023",
@@ -3466,7 +3466,7 @@
       "cnpjCpf": "61.160.768/0001-17",
       "numAditivos": 2,
       "numApostilamentos": 0,
-      "fiscais": "Kalida Jeica Fernandes  de AraújoMat.: 7016611"
+      "fiscais": "Kalida Jeica Fernandes de Araújo Mat.: 7016611"
     },
     {
       "numContrato": "019/2023",
@@ -3520,7 +3520,7 @@
       "cnpjCpf": "66.582.784/0001-11",
       "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "Silvana Cantalice RamosMat.: 7000448"
+      "fiscais": "Silvana Cantalice Ramos Mat.: 7000448"
     },
     {
       "numContrato": "022/2023",
@@ -3538,7 +3538,7 @@
       "cnpjCpf": "10.242.721/0001-61",
       "numAditivos": 2,
       "numApostilamentos": 0,
-      "fiscais": "Silvana Cantalice RamosMat.: 7000448"
+      "fiscais": "Silvana Cantalice Ramos Mat.: 7000448"
     },
     {
       "numContrato": "023/2023",
@@ -3574,7 +3574,7 @@
       "cnpjCpf": "03.725.725/0001-35",
       "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "Célia Maria Bezerra  de MeloMat.: 7012993"
+      "fiscais": "Célia Maria Bezerra de Melo Mat.: 7012993"
     },
     {
       "numContrato": "001/2024",
@@ -3696,7 +3696,7 @@
       "situacao": "Concluído",
       "itemFornecido": "Instalação de placas solares.",
       "valorTotalContrato": 71046.91,
-      "contratado": "FUTURA CLIMATIZAÇÃO E ENERGIA RENOVÁVELDISTRIBUIDORA COMÉRCIO E SERVIÇOS LTDA",
+      "contratado": "FUTURA CLIMATIZAÇÃO E ENERGIA RENOVÁVEL DISTRIBUIDORA COMÉRCIO E SERVIÇOS LTDA",
       "cnpjCpf": "30.430.226/0001-93",
       "numAditivos": 1,
       "numApostilamentos": 0,
@@ -3728,15 +3728,15 @@
       "numEdital": "Pregão Eletrônico nº 037/2023",
       "modalidade": "Pregão Eletrônico",
       "vigenciaInicio": "19/02/2024",
-      "vigenciaTermino": "16/08/2026",
+      "vigenciaTermino": "18/08/2027",
       "situacao": "Ativo",
       "itemFornecido": "Locação de centrais telefônicas",
       "valorTotalContrato": 43800.0,
       "contratado": "MOBILE COMÉRCIO E SERVIÇOS EM TELECOMUNICAÇÕES LTDA",
       "cnpjCpf": "07.343.712/0001-52",
-      "numAditivos": 0,
+      "numAditivos": 1,
       "numApostilamentos": 1,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "002/2024",
@@ -3914,7 +3914,7 @@
       "valorTotalContrato": 36300.0,
       "contratado": "SEGUROS SURA S.A.",
       "cnpjCpf": "33.065.699/0001-27",
-      "numAditivos": 1,
+      "numAditivos": 2,
       "numApostilamentos": 0,
       "fiscais": "Flávio Henrique Lucena - Mat: 701.300-1"
     },
@@ -4078,7 +4078,7 @@
       "cnpjCpf": "***.408.554-**",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "SIilvana Cantalice RamosMat.:7000448"
+      "fiscais": "SIilvana Cantalice Ramos Mat.:7000448"
     },
     {
       "numContrato": "011/2024",
@@ -4096,7 +4096,7 @@
       "cnpjCpf": "22.967.448/0001-11",
       "numAditivos": 1,
       "numApostilamentos": 1,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "012/2024",
@@ -4222,7 +4222,7 @@
       "cnpjCpf": "35.665.761/0001-47",
       "numAditivos": 0,
       "numApostilamentos": 1,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "019/2024",
@@ -4240,7 +4240,7 @@
       "cnpjCpf": "40.001.712/0001-40",
       "numAditivos": 0,
       "numApostilamentos": 1,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Fábio Nóbrega de AlbuquerqueMat.: 701316"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Fábio Nóbrega de Albuquerque Mat.: 701316"
     },
     {
       "numContrato": "020/2024",
@@ -4258,7 +4258,7 @@
       "cnpjCpf": "41.083.551/0001-43",
       "numAditivos": 1,
       "numApostilamentos": 1,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "021/2024",
@@ -4276,7 +4276,7 @@
       "cnpjCpf": "57.062.824/0001-03",
       "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "Andrea Maria Batista da SilvaMat.: 7024240"
+      "fiscais": "Andrea Maria Batista da Silva Mat.: 7024240"
     },
     {
       "numContrato": "002/2025",
@@ -4294,7 +4294,7 @@
       "cnpjCpf": "40.001.712/0001-40",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Fábio Nóbrega de AlbuquerqueMat.: 701316"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Fábio Nóbrega de Albuquerque Mat.: 701316"
     },
     {
       "numContrato": "9912640355/2024",
@@ -4366,7 +4366,7 @@
       "cnpjCpf": "27.759.111/0001-32",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "002/2025",
@@ -4395,7 +4395,7 @@
       "modalidade": "Dispensa",
       "vigenciaInicio": "14/04/2025",
       "vigenciaTermino": "14/04/2026",
-      "situacao": "Ativo",
+      "situacao": "Concluído",
       "itemFornecido": "Café",
       "valorTotalContrato": 38500.0,
       "contratado": "CAFÉ COLISEU LTDA",
@@ -4413,7 +4413,7 @@
       "modalidade": "Dispensa",
       "vigenciaInicio": "14/04/2025",
       "vigenciaTermino": "14/04/2026",
-      "situacao": "Ativo",
+      "situacao": "Concluído",
       "itemFornecido": "Leite",
       "valorTotalContrato": 1320.0,
       "contratado": "ALEXYA LEMOS DE ALBUQUERQUE",
@@ -4474,7 +4474,7 @@
       "cnpjCpf": "44.566.482/0001-17",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "011/2025",
@@ -4485,14 +4485,14 @@
       "modalidade": "Dispensa",
       "vigenciaInicio": "14/05/2025",
       "vigenciaTermino": "14/05/2026",
-      "situacao": "Ativo",
+      "situacao": "Concluído",
       "itemFornecido": "Serviço",
       "valorTotalContrato": 9200.0,
       "contratado": "IRANEIDE GONÇALVES DE ABRANTES - ME",
       "cnpjCpf": "04.798.838/0001-23",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Silvana Maia  Peixoto de CarvalhoMat.: 7013892"
+      "fiscais": "Silvana Maia Peixoto de Carvalho Mat.: 7013892"
     },
     {
       "numContrato": "002/2025",
@@ -4538,15 +4538,15 @@
       "numEdital": "Dispensa de Licitação nº 90011/2025",
       "modalidade": "Dispensa",
       "vigenciaInicio": "06/07/2025",
-      "vigenciaTermino": "06/07/2026",
+      "vigenciaTermino": "05/07/2027",
       "situacao": "Ativo",
       "itemFornecido": "Certificado Digital",
       "valorTotalContrato": 1040.0,
       "contratado": "X.DIGITAL BRASIL SEGURANÇA DA INFORMAÇÃO LTDA",
       "cnpjCpf": "38.597.881/0001-42",
-      "numAditivos": 0,
+      "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "Felipe Sette Carneiro de MoraisMat.: 7013159"
+      "fiscais": "Felipe Sette Carneiro de Morais Mat.: 7013159"
     },
     {
       "numContrato": "009/2025",
@@ -4557,14 +4557,14 @@
       "modalidade": "Dispensa",
       "vigenciaInicio": "A partir da data de entrega do objeto adquirido",
       "vigenciaTermino": "12 (doze) meses após a data de entrega do objeto adquirido",
-      "situacao": "Ativo",
+      "situacao": "Concluído",
       "itemFornecido": "Dispositivo de armazenamento interno",
       "valorTotalContrato": 5750.0,
       "contratado": "ERAGON COMÉRCIO E SERVIÇOS DE INFORMÁTICA E PAPELARIA EIRELI",
       "cnpjCpf": "35.380.582/0001-63",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Felipe Sette Carneiro de MoraisMat.: 7013159"
+      "fiscais": "Felipe Sette Carneiro de Morais Mat.: 7013159"
     },
     {
       "numContrato": "012/2025",
@@ -4574,13 +4574,13 @@
       "numEdital": "Dispensa de Licitação nº 90013/2025",
       "modalidade": "Dispensa",
       "vigenciaInicio": "02/06/2025",
-      "vigenciaTermino": "02/06/2026",
+      "vigenciaTermino": "01/06/2027",
       "situacao": "Ativo",
       "itemFornecido": "Serviço mensal de manutenção em João Pessoa",
       "valorTotalContrato": 30598.8,
       "contratado": "LIONS COMERCIO E SERVICOS LTDA",
       "cnpjCpf": "50.340.684/0001-49",
-      "numAditivos": 0,
+      "numAditivos": 1,
       "numApostilamentos": 0,
       "fiscais": "Francisco Monteiro de Morais - Mat: 701.328-1"
     },
@@ -4618,7 +4618,7 @@
       "cnpjCpf": "48.059.630/0001-68",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Felipe Sette Carneiro de MoraisMat.: 7013159"
+      "fiscais": "Felipe Sette Carneiro de Morais Mat.: 7013159"
     },
     {
       "numContrato": "001/2025",
@@ -4672,7 +4672,7 @@
       "cnpjCpf": "30.956.229/0001-65",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "016/2025",
@@ -4744,7 +4744,7 @@
       "cnpjCpf": "04.602.789/0001-01",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Felipe Sette Carneiro de MoraisMat.: 7013159"
+      "fiscais": "Felipe Sette Carneiro de Morais Mat.: 7013159"
     },
     {
       "numContrato": "018/2025",
@@ -4775,7 +4775,7 @@
       "vigenciaTermino": "24/10/2030",
       "situacao": "Ativo",
       "itemFornecido": "Posto 24 horas - João Pessoa",
-      "valorTotalContrato": null,
+      "valorTotalContrato": 0,
       "contratado": "FORÇA ALERTA SEGURANÇA E TRANSPORTE DE VALORES LTDA",
       "cnpjCpf": "10.446.347/0004-69",
       "numAditivos": 0,
@@ -4798,7 +4798,7 @@
       "cnpjCpf": "980.081.294-68",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "SIilvana Cantalice RamosMat.:7000448"
+      "fiscais": "SIilvana Cantalice Ramos Mat.:7000448"
     },
     {
       "numContrato": "021/2025",
@@ -4852,7 +4852,7 @@
       "cnpjCpf": "10.482.492/0001-52",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Esdras Neves de Oliveira - Mat.: 701522-4 Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "025/2025",
@@ -4883,11 +4883,11 @@
       "vigenciaTermino": "27/11/2030",
       "situacao": "Ativo",
       "itemFornecido": "Licenças Google Workspace",
-      "valorTotalContrato": null,
+      "valorTotalContrato": 0,
       "contratado": "EMPREL EMPRESA MUNICIPAL DE INFORMÁTICA",
       "cnpjCpf": "11.006.269/0001-00",
       "numAditivos": 0,
-      "numApostilamentos": 0,
+      "numApostilamentos": 1,
       "fiscais": "Clayton Queiroz de Oliveira - Mat: 702.984-5"
     },
     {
@@ -4960,7 +4960,7 @@
       "cnpjCpf": "61.252.332/0001-58",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "FÁBIO NÓBREGA DE ALBUQUERQUEMat.: 701316"
+      "fiscais": "FÁBIO NÓBREGA DE ALBUQUERQUE Mat.: 701316"
     },
     {
       "numContrato": "031/2025",
@@ -4971,7 +4971,7 @@
       "modalidade": "Dispensa",
       "vigenciaInicio": "06/02/2026",
       "vigenciaTermino": "05/05/2026",
-      "situacao": "Ativo",
+      "situacao": "Concluído",
       "itemFornecido": "Bastão de tripé para celular",
       "valorTotalContrato": 391.0,
       "contratado": "WM COMERCIO E SERVIÇOS LTDA",
@@ -4989,7 +4989,7 @@
       "modalidade": "Dispensa",
       "vigenciaInicio": "12/03/2026",
       "vigenciaTermino": "11/06/2026",
-      "situacao": "Ativo",
+      "situacao": "Concluído",
       "itemFornecido": "Bateria LP-E17",
       "valorTotalContrato": 517.0,
       "contratado": "JESSICA FELIX GUERRA ME",
@@ -5050,7 +5050,7 @@
       "cnpjCpf": "61.600.839/0001-55",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Graziela Tomaz Benevenuto MarquesMat.: 7015208"
+      "fiscais": "Graziela Tomaz Benevenuto Marques Mat.: 7015208"
     },
     {
       "numContrato": "002/2026",
@@ -5194,7 +5194,7 @@
       "cnpjCpf": "08.228.698/0001-09",
       "numAditivos": 1,
       "numApostilamentos": 0,
-      "fiscais": "Ana Cecilia Arco Verde BarbosaMat.: 7009909Eduardo Alves  de VasconcelosMat.: 7013299"
+      "fiscais": "Ana Cecilia Arco Verde Barbosa Mat.: 7009909 Eduardo Alves de Vasconcelos Mat.: 7013299"
     },
     {
       "numContrato": "12501/2026",
@@ -5208,11 +5208,11 @@
       "situacao": "Ativo",
       "itemFornecido": "Sistema de Distribuição (CUSD) e Compra de Energia Elétrica no Ambiente de Contratação Regulada (CCER).",
       "valorTotalContrato": 192000.0,
-      "contratado": "EMPRESA: ENERGISA PARAIBA -DISTRIBUIDORA DE ENERGIA S/A",
+      "contratado": "EMPRESA: ENERGISA PARAIBA - DISTRIBUIDORA DE ENERGIA S/A",
       "cnpjCpf": "09.095.183/0001-40",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Klyver Farias  da CostaMat.: 7013531"
+      "fiscais": "Klyver Farias da Costa Mat.: 7013531"
     },
     {
       "numContrato": "007/2025",
@@ -5230,7 +5230,7 @@
       "cnpjCpf": "53.571.459/0001-01",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Diomedes Cavalcanti da Silva NetoMat.: 7016026Felipe Sette Carneiro de MoraisMat.: 7013159"
+      "fiscais": "Diomedes Cavalcanti da Silva Neto Mat.: 7016026 Felipe Sette Carneiro de Morais Mat.: 7013159"
     },
     {
       "numContrato": "009/2026",
@@ -5338,7 +5338,7 @@
       "cnpjCpf": "29.175.021/0001-20",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Klyver Farias  da CostaMat.: 7013531"
+      "fiscais": "Klyver Farias da Costa Mat.: 7013531"
     },
     {
       "numContrato": "006/2026",
@@ -5392,7 +5392,7 @@
       "cnpjCpf": "54.589.427/0001-04",
       "numAditivos": 0,
       "numApostilamentos": 0,
-      "fiscais": "Francisco Monteiro de MoraisMat.: 7013281"
+      "fiscais": "Francisco Monteiro de Morais Mat.: 7013281"
     },
     {
       "numContrato": "015/2026",
@@ -5491,8 +5491,8 @@
       "anoPublicacao": 2026,
       "numEdital": "Dispensa de licitação n° 017/2026 - PNCP nº 020/2026",
       "modalidade": "Dispensa",
-      "vigenciaInicio": "12 (doze) mese a partir da data de entrega do objeto adquirido",
-      "vigenciaTermino": "12 (doze) mese a partir da data de entrega do objeto adquirido",
+      "vigenciaInicio": "14/05/2026",
+      "vigenciaTermino": "13/05/2027",
       "situacao": "Ativo",
       "itemFornecido": "MEMÓRIA DDR4",
       "valorTotalContrato": 1830.0,
