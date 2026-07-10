@@ -11,7 +11,7 @@ import ChartCard      from '@/components/charts/ChartCard';
 import BarByDimension from '@/components/charts/BarByDimension';
 import DataTable, { type Column } from '@/components/table/DataTable';
 
-import { getContratos, ANOS_PUBLICACAO, SITUACOES } from '@/lib/api/contratos';
+import { getContratos, ANOS_PUBLICACAO, SITUACOES, MODALIDADES } from '@/lib/api/contratos';
 import {
   computeKpis,
   computeVencimentosMensais,
@@ -127,12 +127,16 @@ export default function ContratosClient() {
     situacoes:         [],
     anoPublicacoes:    [],
     alertasVencimento: [],
+    modalidades:       [],
+    mesesVencimento:   [],
   });
 
   const activeCount =
     (filters.situacoes.length         > 0 ? 1 : 0) +
     (filters.anoPublicacoes.length    > 0 ? 1 : 0) +
-    (filters.alertasVencimento.length > 0 ? 1 : 0);
+    (filters.alertasVencimento.length > 0 ? 1 : 0) +
+    (filters.modalidades.length       > 0 ? 1 : 0) +
+    (filters.mesesVencimento.length   > 0 ? 1 : 0);
 
   const records = useMemo(() => getContratos(filters), [filters]);
 
@@ -142,8 +146,9 @@ export default function ContratosClient() {
 
   const modalidades = useMemo(() => computeModalidades(records), [records]);
 
-  const ANOS_OPTIONS     = ANOS_PUBLICACAO.map(a => ({ value: a, label: String(a) })).reverse();
-  const SITUACAO_OPTIONS = SITUACOES.map(s => ({ value: s, label: s }));
+  const ANOS_OPTIONS       = ANOS_PUBLICACAO.map(a => ({ value: a, label: String(a) })).reverse();
+  const SITUACAO_OPTIONS   = SITUACOES.map(s => ({ value: s, label: s }));
+  const MODALIDADE_OPTIONS = MODALIDADES.map(m => ({ value: m, label: m }));
   const ALERTA_OPTIONS = [
     { value: 'expirado',   label: 'Expirado (Ativo)'     },
     { value: 'vencendo30', label: 'Vencendo em 30 dias'  },
@@ -156,7 +161,36 @@ export default function ContratosClient() {
     filters.situacoes.length         > 0 ? filters.situacoes.join(', ')                                                                               : null,
     filters.alertasVencimento.length > 0 ? filters.alertasVencimento.map(v => ALERTA_OPTIONS.find(o => o.value === v)?.label ?? v).join(', ') : null,
     filters.anoPublicacoes.length    > 0 ? filters.anoPublicacoes.join(', ')                                                                          : null,
+    filters.modalidades.length       > 0 ? filters.modalidades.join(', ')                                                                            : null,
+    filters.mesesVencimento.length   > 0 ? filters.mesesVencimento.map(k => vencimentos.find(v => `${v.ano}-${String(v.mes).padStart(2, '0')}` === k)?.label ?? k).join(', ') : null,
   ].filter(Boolean).join(' · ') || 'Todos os contratos';
+
+  // Clique na barra "Mês de Vencimento" (toggle) — filtra pelo mês/ano e trava Situação = Ativo
+  function toggleMesVencimento(label: string) {
+    const v = vencimentos.find(x => x.label === label);
+    if (!v) return;
+    const key = `${v.ano}-${String(v.mes).padStart(2, '0')}`;
+    setFilters(f => {
+      const jaSelecionado = f.mesesVencimento.includes(key);
+      return {
+        ...f,
+        mesesVencimento: jaSelecionado
+          ? f.mesesVencimento.filter(k => k !== key)
+          : [...f.mesesVencimento, key],
+        situacoes: jaSelecionado ? f.situacoes : ['Ativo'],
+      };
+    });
+  }
+
+  // Clique na barra "Modalidade" (toggle)
+  function toggleModalidade(label: string) {
+    setFilters(f => ({
+      ...f,
+      modalidades: f.modalidades.includes(label)
+        ? f.modalidades.filter(m => m !== label)
+        : [...f.modalidades, label],
+    }));
+  }
 
   const aiPayload = useMemo(() => ({
     periodoLabel,
@@ -215,7 +249,7 @@ export default function ContratosClient() {
       {/* ── Filtros ──────────────────────────────────────────────── */}
       <FilterBar
         activeCount={activeCount}
-        onClear={() => setFilters({ situacoes: [], anoPublicacoes: [], alertasVencimento: [] })}
+        onClear={() => setFilters({ situacoes: [], anoPublicacoes: [], alertasVencimento: [], modalidades: [], mesesVencimento: [] })}
       >
         <MultiSelectFilter
           label="Situação"
@@ -241,6 +275,14 @@ export default function ContratosClient() {
           placeholder="Todos"
           searchable={false}
         />
+        <MultiSelectFilter
+          label="Modalidade"
+          values={filters.modalidades}
+          options={MODALIDADE_OPTIONS}
+          onChange={v => setFilters(f => ({ ...f, modalidades: v }))}
+          placeholder="Todas"
+          searchable={false}
+        />
       </FilterBar>
 
       {/* ── Gráficos ─────────────────────────────────────────────── */}
@@ -252,10 +294,13 @@ export default function ContratosClient() {
           minHeight={Math.max(280, vencimentos.length * 34)}
         >
           <BarByDimension
-            data={vencimentos.map(v => ({ label: v.label, value: v.count }))}
+            data={[...vencimentos].reverse().map(v => ({ label: v.label, value: v.count }))}
             valueLabel="Contratos"
+            unit="count"
             height={Math.max(280, vencimentos.length * 34)}
             color="#1D5288"
+            onBarClick={toggleMesVencimento}
+            sortByValue={false}
           />
         </ChartCard>
 
@@ -268,8 +313,10 @@ export default function ContratosClient() {
           <BarByDimension
             data={modalidades.map(m => ({ label: m.modalidade, value: m.count }))}
             valueLabel="Contratos"
+            unit="count"
             height={Math.max(280, modalidades.length * 40)}
             color="#2E6DB4"
+            onBarClick={toggleModalidade}
           />
         </ChartCard>
       </div>

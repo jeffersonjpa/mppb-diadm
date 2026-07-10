@@ -46,4 +46,6 @@ export interface ContratoFilters {
   situacoes:         string[];
   anoPublicacoes:    number[];
   alertasVencimento: string[];
+  modalidades:       string[];
+  mesesVencimento:   string[]; // chave "AAAA-MM", ex. "2026-12"
 }

@@ -14,8 +14,10 @@ interface BarByDimensionProps {
   valueLabel?: string;
   height?:     number;
   color?:      string;
-  unit?:       'brl' | 'm3';
+  unit?:       'brl' | 'm3' | 'count';
   onBarClick?: (label: string) => void;
+  /** Quando false, preserva a ordem recebida em `data` em vez de ordenar por valor. */
+  sortByValue?: boolean;
 }
 
 export default function BarByDimension({
@@ -25,15 +27,20 @@ export default function BarByDimension({
   color = '#1D5288',
   unit = 'brl',
   onBarClick,
+  sortByValue = true,
 }: BarByDimensionProps) {
   const fmt      = unit === 'm3'
     ? (v: number) => v.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + ' m³'
+    : unit === 'count'
+    ? (v: number) => v.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
     : formatBRL;
   const fmtShort = unit === 'm3'
     ? (v: number) => (v >= 1000 ? (v / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'k m³' : v.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + ' m³')
+    : unit === 'count'
+    ? (v: number) => v.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
     : formatBRLShort;
   // Ordena crescente p/ barras horizontais (ECharts exibe de baixo p/ cima)
-  const sorted = [...data].sort((a, b) => a.value - b.value);
+  const sorted = sortByValue ? [...data].sort((a, b) => a.value - b.value) : data;
 
   const option = {
     ...mppbTheme,

@@ -40,5 +40,14 @@ export function getContratos(filters: ContratoFilters): ContratoRecord[] {
   if (filters.alertasVencimento.length > 0) {
     result = result.filter(r => filters.alertasVencimento.some(a => matchAlerta(r, a)));
   }
+  if (filters.modalidades.length > 0) result = result.filter(r => filters.modalidades.includes(r.modalidade));
+  if (filters.mesesVencimento.length > 0) {
+    result = result.filter(r => {
+      const dt = parseDate(r.vigenciaTermino);
+      if (!dt) return false;
+      const key = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}`;
+      return filters.mesesVencimento.includes(key);
+    });
+  }
   return result;
 }
