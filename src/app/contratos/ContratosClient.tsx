@@ -131,6 +131,8 @@ export default function ContratosClient() {
     mesesVencimento:   [],
   });
 
+  const [ordenacaoVencimento, setOrdenacaoVencimento] = useState<'mes' | 'quantidade'>('mes');
+
   const activeCount =
     (filters.situacoes.length         > 0 ? 1 : 0) +
     (filters.anoPublicacoes.length    > 0 ? 1 : 0) +
@@ -292,15 +294,44 @@ export default function ContratosClient() {
           title="Contratos Ativos por Mês de Vencimento"
           subtitle={`Quantidade de contratos · ${periodoLabel}`}
           minHeight={Math.max(280, vencimentos.length * 34)}
+          actions={
+            <div className="flex bg-[#F1F4F8] border border-[#E7EBF0] rounded-[9px] p-0.5 gap-0.5">
+              {([
+                { value: 'mes',        label: 'MÊS' },
+                { value: 'quantidade', label: 'QUANTITATIVO' },
+              ] as const).map(opt => {
+                const active = ordenacaoVencimento === opt.value;
+                return (
+                  <button
+                    key={opt.value}
+                    onClick={() => setOrdenacaoVencimento(opt.value)}
+                    className={`
+                      border-0 cursor-pointer font-bold text-[10px] tracking-[0.4px] px-2.5 py-1.5 rounded-[6px]
+                      transition-all duration-150
+                      ${active
+                        ? 'bg-mp-primary text-white shadow-[0_1px_2px_rgba(29,82,136,0.3)]'
+                        : 'bg-transparent text-mp-muted hover:text-mp-text'}
+                    `}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+          }
         >
           <BarByDimension
-            data={[...vencimentos].reverse().map(v => ({ label: v.label, value: v.count }))}
+            data={
+              ordenacaoVencimento === 'mes'
+                ? [...vencimentos].reverse().map(v => ({ label: v.label, value: v.count }))
+                : vencimentos.map(v => ({ label: v.label, value: v.count }))
+            }
             valueLabel="Contratos"
             unit="count"
             height={Math.max(280, vencimentos.length * 34)}
             color="#1D5288"
             onBarClick={toggleMesVencimento}
-            sortByValue={false}
+            sortByValue={ordenacaoVencimento === 'quantidade'}
           />
         </ChartCard>
 
