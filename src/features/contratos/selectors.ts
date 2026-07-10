@@ -1,6 +1,6 @@
 import type { ContratoRecord, ContratoKpis, VencimentoMes, ModalidadeSummary } from './types';
 
-const TODAY = new Date(2026, 5, 25); // June 25, 2026 — data de referência
+const TODAY = new Date();
 
 function parseDate(s: string | null): Date | null {
   if (!s) return null;

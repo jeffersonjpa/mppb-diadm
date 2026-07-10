@@ -7,7 +7,7 @@ export const ANOS_PUBLICACAO = rawData.anos as number[];
 export const SITUACOES       = rawData.situacoes as string[];
 export const MODALIDADES     = rawData.modalidades as string[];
 
-const TODAY = new Date(2026, 5, 25);
+const TODAY = new Date();
 
 function parseDate(s: string | null): Date | null {
   if (!s) return null;
