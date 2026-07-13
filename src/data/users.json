@@ -4,5 +4,17 @@
     "passwordHash": "$2b$12$OLWCzLE5wLa5WwWBYhCuyOPNeZBgGC5LE1jvfUcMGMdTsUy4QYzWy",
     "name": "Jefferson",
     "role": "admin"
+  },
+  {
+    "email": "viniciusc@mppb.mp.br",
+    "passwordHash": "$2b$12$CxgSKBJV9/5KLv93KwasZ.mdaGZROtYkBKhFesy5ifQBlya4RYyOu",
+    "name": "Marcos Vinícius Ferreira Cesário",
+    "role": "admin"
+  },
+  {
+    "email": "jose.almeida@mppb.mp.br",
+    "passwordHash": "$2b$12$LHrFMUJNvDL4UcEy4oFLWu4.NkVvPwUXLPCz9iKeCNkODQGvgNKqa",
+    "name": "Jose Edson dos Santos Almeida",
+    "role": "admin"
   }
 ]
