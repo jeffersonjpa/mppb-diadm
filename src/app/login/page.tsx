@@ -1,12 +1,27 @@
 'use client';
 
-import { useActionState } from 'react';
+import { Suspense, useActionState } from 'react';
 import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { credentialsLogin } from './actions';
 
 export default function LoginPage() {
-  const [error, formAction, isPending] = useActionState(credentialsLogin, undefined);
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
+  const [formError, formAction, isPending] = useActionState(credentialsLogin, undefined);
+  const searchParams = useSearchParams();
+  const oauthError =
+    searchParams.get('error') === 'AccessDenied'
+      ? 'Usuário não autorizado. Procure o administrador do sistema.'
+      : undefined;
+  const error = formError ?? oauthError;
 
   async function handleGoogle() {
     await signIn('google', { redirectTo: '/visao-geral' });

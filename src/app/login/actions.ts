@@ -1,7 +1,10 @@
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, UnauthorizedEmailError } from '@/auth';
 import { AuthError } from 'next-auth';
+
+const UNAUTHORIZED_MESSAGE =
+  'Usuário não autorizado. Procure o administrador do sistema.';
 
 export async function credentialsLogin(
   _prevState: string | undefined,
@@ -17,6 +20,9 @@ export async function credentialsLogin(
     // next-auth lança NEXT_REDIRECT para redirecionar — deve ser relançado
     if ((error as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
       throw error;
+    }
+    if (error instanceof UnauthorizedEmailError) {
+      return UNAUTHORIZED_MESSAGE;
     }
     if (error instanceof AuthError) {
       return 'Email ou senha incorretos.';

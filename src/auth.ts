@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
@@ -7,6 +7,21 @@ import type { LocalUser, UserRole } from '@/types/auth';
 import usersData from '@/data/users.json';
 
 const users = usersData as LocalUser[];
+
+const AUTHORIZED_DOMAIN = '@mppb.mp.br';
+
+export class UnauthorizedEmailError extends CredentialsSignin {
+  code = 'unauthorized-email';
+}
+
+function isAuthorizedEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  const normalized = email.toLowerCase();
+  return (
+    normalized.endsWith(AUTHORIZED_DOMAIN) &&
+    users.some((u) => u.email.toLowerCase() === normalized)
+  );
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -21,7 +36,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!credentials?.email || !credentials?.password) return null;
 
         const email = credentials.email as string;
-        const user = users.find((u) => u.email === email);
+        if (!isAuthorizedEmail(email)) throw new UnauthorizedEmailError();
+
+        const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
         if (!user) return null;
 
         const valid = await bcrypt.compare(
@@ -35,8 +52,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    signIn() {
-      return true;
+    signIn({ user }) {
+      return isAuthorizedEmail(user.email);
     },
     jwt({ token, user }) {
       if (user) {
@@ -45,7 +62,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (role) {
           token.role = role;
         } else {
-          const local = users.find((u) => u.email === token.email);
+          const local = users.find((u) => u.email?.toLowerCase() === token.email?.toLowerCase());
           token.role = local?.role ?? 'consulta';
         }
       }
