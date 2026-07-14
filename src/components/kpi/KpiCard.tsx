@@ -1,13 +1,14 @@
 import { formatPercent } from '@/lib/format';
 
 interface KpiCardProps {
-  label:      string;
-  value:      string;
-  icon:       React.ReactNode;
-  iconBg?:    string;
-  iconColor?: string;
-  delta?:     number | null;
-  subtitle?:  string;
+  label:           string;
+  value:           string;
+  icon:            React.ReactNode;
+  iconBg?:         string;
+  iconColor?:      string;
+  delta?:          number | null;
+  deltaAbsolute?:  string | null;
+  subtitle?:       string;
 }
 
 export default function KpiCard({
@@ -17,6 +18,7 @@ export default function KpiCard({
   iconBg    = 'bg-mp-tint',
   iconColor = 'text-mp-primary',
   delta,
+  deltaAbsolute,
   subtitle,
 }: KpiCardProps) {
   const hasDelta = delta != null;
@@ -44,16 +46,36 @@ export default function KpiCard({
         </span>
 
         {hasDelta && (
-          <span
-            className={`
-              inline-flex items-center gap-1 px-2 py-0.5 rounded-[6px] text-[12px] font-bold
-              ${isPositive
-                ? 'bg-mp-success-bg text-mp-success'
-                : 'bg-mp-danger-bg  text-mp-danger'}
-            `}
-          >
-            {isPositive ? '▲' : '▼'}
-            {formatPercent(delta)}
+          <span className="relative inline-flex group">
+            <span
+              tabIndex={0}
+              className={`
+                inline-flex items-center gap-1 px-2 py-0.5 rounded-[6px] text-[12px] font-bold cursor-default
+                ${isPositive
+                  ? 'bg-mp-success-bg text-mp-success'
+                  : 'bg-mp-danger-bg  text-mp-danger'}
+              `}
+            >
+              {isPositive ? '▲' : '▼'}
+              {formatPercent(delta)}
+            </span>
+
+            {deltaAbsolute && (
+              <span
+                role="tooltip"
+                className="
+                  pointer-events-none absolute left-1/2 bottom-full mb-1.5 -translate-x-1/2
+                  whitespace-nowrap rounded-[6px] bg-mp-ink px-2 py-1 text-[11px] font-semibold text-white
+                  opacity-0 scale-95 transition-all duration-100
+                  group-hover:opacity-100 group-hover:scale-100
+                  group-focus-within:opacity-100 group-focus-within:scale-100
+                  z-10
+                "
+              >
+                {deltaAbsolute}
+                <span className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-mp-ink" />
+              </span>
+            )}
           </span>
         )}
       </div>

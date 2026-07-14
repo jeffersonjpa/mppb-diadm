@@ -57,6 +57,9 @@ export function computeKpis(
   let varTotal: number | null = null;
   let varMedio: number | null = null;
   let varQuantidade: number | null = null;
+  let varTotalAbs: number | null = null;
+  let varMedioAbs: number | null = null;
+  let varQuantidadeAbs: number | null = null;
 
   if (records.length > 0) {
     // Encontra o último mês com dados dentro do período selecionado
@@ -89,9 +92,9 @@ export function computeKpis(
       const prevQty = prevMonthRecs.length;
       const prevAvg = prevQty > 0 ? prevTotal / prevQty : 0;
 
-      if (prevTotal > 0) varTotal = ((currTotal - prevTotal) / prevTotal) * 100;
-      if (prevQty > 0) varQuantidade = ((currQty - prevQty) / prevQty) * 100;
-      if (prevAvg > 0) varMedio = ((currAvg - prevAvg) / prevAvg) * 100;
+      if (prevTotal > 0) { varTotal = ((currTotal - prevTotal) / prevTotal) * 100; varTotalAbs = currTotal - prevTotal; }
+      if (prevQty > 0)   { varQuantidade = ((currQty - prevQty) / prevQty) * 100; varQuantidadeAbs = currQty - prevQty; }
+      if (prevAvg > 0)   { varMedio = ((currAvg - prevAvg) / prevAvg) * 100; varMedioAbs = currAvg - prevAvg; }
     }
   }
 
@@ -102,6 +105,9 @@ export function computeKpis(
     varTotal: varTotal !== null ? round1(varTotal) : null,
     varMedio: varMedio !== null ? round1(varMedio) : null,
     varQuantidade: varQuantidade !== null ? round1(varQuantidade) : null,
+    varTotalAbs:      varTotalAbs      !== null ? round2(varTotalAbs)      : null,
+    varMedioAbs:      varMedioAbs      !== null ? round2(varMedioAbs)      : null,
+    varQuantidadeAbs: varQuantidadeAbs !== null ? round2(varQuantidadeAbs) : null,
   };
 }
 

@@ -27,6 +27,9 @@ export function computeKpis(
     varValor:   varValor  != null ? round1(varValor)  : null,
     varConsumo: varConsumo != null ? round1(varConsumo) : null,
     varPreco:   varPreco  != null ? round1(varPreco)  : null,
+    varValorAbs:   varValor   != null ? round2(currentTotal   - prev!.valorTotal) : null,
+    varConsumoAbs: varConsumo != null ? round2(currentConsumo - prev!.consumo)    : null,
+    varPrecoAbs:   varPreco   != null ? round2(currentPreco   - prevPreco)        : null,
   };
 }
 

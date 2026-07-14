@@ -25,9 +25,12 @@ export function computeKpis(
     kwh,
     custoPorKwh,
     ucs,
-    varValor:   varValor  != null ? round1(varValor)  : null,
-    varKwh:     varKwh    != null ? round1(varKwh)    : null,
-    varCusto:   varCusto  != null ? round1(varCusto)  : null,
+    varValor:    varValor  != null ? round1(varValor)  : null,
+    varKwh:      varKwh    != null ? round1(varKwh)    : null,
+    varCusto:    varCusto  != null ? round1(varCusto)  : null,
+    varValorAbs: varValor  != null ? currentTotal - prev!.valorTotal : null,
+    varKwhAbs:   varKwh    != null ? currentKwh   - prev!.kwh        : null,
+    varCustoAbs: varCusto  != null ? currentCusto - prevCusto        : null,
   };
 }
 

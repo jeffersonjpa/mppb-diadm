@@ -25,4 +25,7 @@ export interface TerceirizadosKpis {
   varTotal: number | null;
   varMedio: number | null;
   varQuantidade: number | null;
+  varTotalAbs:      number | null;
+  varMedioAbs:      number | null;
+  varQuantidadeAbs: number | null;
 }

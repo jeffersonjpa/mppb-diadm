@@ -21,7 +21,7 @@ import { computeKpis, computeTopCidades, computeTopUnidades, formatSerieForChart
 import EfficiencyGroupedBar from '@/components/charts/EfficiencyGroupedBar';
 import eficienciaData from '@/data/eficiencia-data.json';
 import type { EficienciaUnidade } from '@/features/energia/types';
-import { formatBRL, formatKwh, MESES_SHORT, MESES_FULL } from '@/lib/format';
+import { formatBRL, formatKwh, signedAmount, MESES_SHORT, MESES_FULL } from '@/lib/format';
 import type { EnergiaRecord, EnergiaFilters } from '@/features/energia/types';
 
 /* ── Defaults ──────────────────────────────────────────────────── */
@@ -235,6 +235,8 @@ export default function EnergiaClient() {
     ? `R$ ${kpis.custoPorKwh.toLocaleString('pt-BR', { minimumFractionDigits: 4 })}/kWh`
     : '—';
 
+  const formatCustoKwh = (v: number) => `R$ ${v.toLocaleString('pt-BR', { minimumFractionDigits: 4 })}/kWh`;
+
   return (
     <div className="space-y-5">
       <p className="text-[13px] text-mp-muted -mt-2">{periodoLabel}</p>
@@ -248,6 +250,7 @@ export default function EnergiaClient() {
           iconBg="bg-mp-tint"
           iconColor="text-mp-primary"
           delta={kpis.varValor}
+          deltaAbsolute={kpis.varValorAbs != null ? signedAmount(kpis.varValorAbs, formatBRL) : undefined}
           subtitle={kpis.varValor !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -257,6 +260,7 @@ export default function EnergiaClient() {
           iconBg="bg-mp-tint"
           iconColor="text-mp-primary"
           delta={kpis.varKwh}
+          deltaAbsolute={kpis.varKwhAbs != null ? signedAmount(kpis.varKwhAbs, formatKwh) : undefined}
           subtitle={kpis.varKwh !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -266,6 +270,7 @@ export default function EnergiaClient() {
           iconBg="bg-mp-accent-bg"
           iconColor="text-mp-accent"
           delta={kpis.varCusto}
+          deltaAbsolute={kpis.varCustoAbs != null ? signedAmount(kpis.varCustoAbs, formatCustoKwh) : undefined}
           subtitle={kpis.varCusto !== null ? 'vs mês anterior' : undefined}
         />
       </div>

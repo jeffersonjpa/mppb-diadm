@@ -41,6 +41,9 @@ export interface AguaKpis {
   varValor:    number | null;
   varConsumo:  number | null;
   varPreco:    number | null;
+  varValorAbs:   number | null;
+  varConsumoAbs: number | null;
+  varPrecoAbs:   number | null;
 }
 
 export interface AguaFilters {

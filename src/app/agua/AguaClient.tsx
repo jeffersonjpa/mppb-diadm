@@ -18,7 +18,7 @@ import {
   CIDADES, ANOS,
 } from '@/lib/api/agua';
 import { computeKpis, computeTopCidades, computeTopUnidades, formatSerieForChart } from '@/features/agua/selectors';
-import { formatBRL, MESES_SHORT, MESES_FULL } from '@/lib/format';
+import { formatBRL, signedAmount, MESES_SHORT, MESES_FULL } from '@/lib/format';
 import type { AguaRecord, AguaFilters } from '@/features/agua/types';
 
 /* ── Defaults ──────────────────────────────────────────────────── */
@@ -177,6 +177,9 @@ export default function AguaClient() {
     ? `R$ ${kpis.precoMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/m³`
     : '—';
 
+  const formatConsumo = (v: number) => `${v.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} m³`;
+  const formatPrecoMedio = (v: number) => `R$ ${v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/m³`;
+
   function handleAnosChange(values: string[]) {
     setFilters(f => ({ ...f, anos: values.map(Number) }));
   }
@@ -194,6 +197,7 @@ export default function AguaClient() {
           iconBg="bg-mp-tint"
           iconColor="text-mp-primary"
           delta={kpis.varValor}
+          deltaAbsolute={kpis.varValorAbs != null ? signedAmount(kpis.varValorAbs, formatBRL) : undefined}
           subtitle={kpis.varValor !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -203,6 +207,7 @@ export default function AguaClient() {
           iconBg="bg-mp-tint"
           iconColor="text-mp-primary"
           delta={kpis.varConsumo}
+          deltaAbsolute={kpis.varConsumoAbs != null ? signedAmount(kpis.varConsumoAbs, formatConsumo) : undefined}
           subtitle={kpis.varConsumo !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -212,6 +217,7 @@ export default function AguaClient() {
           iconBg="bg-mp-accent-bg"
           iconColor="text-mp-accent"
           delta={kpis.varPreco}
+          deltaAbsolute={kpis.varPrecoAbs != null ? signedAmount(kpis.varPrecoAbs, formatPrecoMedio) : undefined}
           subtitle={kpis.varPreco !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard

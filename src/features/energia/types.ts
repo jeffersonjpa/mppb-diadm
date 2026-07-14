@@ -47,6 +47,9 @@ export interface EnergiaKpis {
   varValor:    number | null;
   varKwh:      number | null;
   varCusto:    number | null;
+  varValorAbs: number | null;
+  varKwhAbs:   number | null;
+  varCustoAbs: number | null;
 }
 
 export interface EnergiaFilters {

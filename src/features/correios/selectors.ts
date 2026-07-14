@@ -34,6 +34,10 @@ export function computeKpis(
     varQuantidade: varQty != null ? round1(varQty)    : null,
     varCustoMedio: varCusto != null ? round1(varCusto) : null,
     varPeso:    varPeso   != null ? round1(varPeso)   : null,
+    varValorAbs:      varValor  != null ? round2(currentTotal - prev!.valorTotal)  : null,
+    varQuantidadeAbs: varQty    != null ? round2(currentQty   - prev!.quantidade)  : null,
+    varCustoMedioAbs: varCusto  != null ? round2(currentCusto - prevCusto)         : null,
+    varPesoAbs:       varPeso   != null ? round2(currentPeso  - prevPesoKg)        : null,
   };
 }
 

@@ -37,6 +37,10 @@ export interface CorreiosKpis {
   varQuantidade: number | null;
   varCustoMedio: number | null;
   varPeso:      number | null;
+  varValorAbs:      number | null;
+  varQuantidadeAbs: number | null;
+  varCustoMedioAbs: number | null;
+  varPesoAbs:       number | null;
 }
 
 export interface CorreiosFilters {

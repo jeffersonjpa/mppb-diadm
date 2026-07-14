@@ -30,7 +30,7 @@ import {
   formatSerieForChart,
 } from '@/features/terceirizados/selectors';
 
-import { formatBRL, MESES_SHORT } from '@/lib/format';
+import { formatBRL, signedAmount, MESES_SHORT } from '@/lib/format';
 import type { TerceirizadoRecord } from '@/features/terceirizados/types';
 
 /* ── Colunas da tabela ─────────────────────────────────────────── */
@@ -219,6 +219,7 @@ export default function TerceirizadosClient() {
           iconBg="bg-mp-accent-bg"
           iconColor="text-mp-accent"
           delta={kpis.varTotal}
+          deltaAbsolute={kpis.varTotalAbs != null ? signedAmount(kpis.varTotalAbs, formatBRL) : undefined}
           subtitle={kpis.varTotal !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -228,6 +229,7 @@ export default function TerceirizadosClient() {
           iconBg="bg-mp-success-bg"
           iconColor="text-mp-success"
           delta={kpis.varMedio}
+          deltaAbsolute={kpis.varMedioAbs != null ? signedAmount(kpis.varMedioAbs, formatBRL) : undefined}
           subtitle={kpis.varMedio !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -237,6 +239,7 @@ export default function TerceirizadosClient() {
           iconBg="bg-mp-tint"
           iconColor="text-mp-primary"
           delta={kpis.varQuantidade}
+          deltaAbsolute={kpis.varQuantidadeAbs != null ? signedAmount(kpis.varQuantidadeAbs, v => v.toLocaleString('pt-BR')) : undefined}
           subtitle={kpis.varQuantidade !== null ? 'vs mês anterior' : undefined}
         />
       </div>

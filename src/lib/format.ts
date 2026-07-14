@@ -40,6 +40,12 @@ export function formatDelta(delta: number | null): string {
   return `${sign} ${formatPercent(delta)}`;
 }
 
+/** Formata uma diferença absoluta com o sinal explícito, ex.: "+ R$ 234,56" ou "− 12 kWh". */
+export function signedAmount(diff: number, formatter: (value: number) => string): string {
+  const sign = diff >= 0 ? '+' : '−';
+  return `${sign} ${formatter(Math.abs(diff))}`;
+}
+
 export function formatMonthYear(mes: number, ano: number): string {
   const MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   return `${MESES[mes - 1]}/${ano}`;

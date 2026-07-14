@@ -18,7 +18,7 @@ import {
   CIDADES, ANOS,
 } from '@/lib/api/correios';
 import { computeKpis, computeTopCidades, formatSerieForChart } from '@/features/correios/selectors';
-import { formatBRL, MESES_SHORT, MESES_FULL } from '@/lib/format';
+import { formatBRL, signedAmount, MESES_SHORT, MESES_FULL } from '@/lib/format';
 import type { CorreiosRecord, CorreiosFilters } from '@/features/correios/types';
 
 /* ── Defaults ──────────────────────────────────────────────────── */
@@ -153,6 +153,10 @@ export default function CorreiosClient() {
     ? `R$ ${kpis.custoMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/item`
     : '—';
 
+  const formatQuantidade = (v: number) => v.toLocaleString('pt-BR');
+  const formatCustoMedio = (v: number) => `R$ ${v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/item`;
+  const formatPeso = (v: number) => `${v.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} kg`;
+
   function handleAnosChange(values: string[]) {
     setFilters(f => ({ ...f, anos: values.map(Number) }));
   }
@@ -170,6 +174,7 @@ export default function CorreiosClient() {
           iconBg="bg-mp-tint"
           iconColor="text-mp-primary"
           delta={kpis.varValor}
+          deltaAbsolute={kpis.varValorAbs != null ? signedAmount(kpis.varValorAbs, formatBRL) : undefined}
           subtitle={kpis.varValor !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -179,6 +184,7 @@ export default function CorreiosClient() {
           iconBg="bg-mp-tint"
           iconColor="text-mp-primary"
           delta={kpis.varQuantidade}
+          deltaAbsolute={kpis.varQuantidadeAbs != null ? signedAmount(kpis.varQuantidadeAbs, formatQuantidade) : undefined}
           subtitle={kpis.varQuantidade !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -188,6 +194,7 @@ export default function CorreiosClient() {
           iconBg="bg-mp-accent-bg"
           iconColor="text-mp-accent"
           delta={kpis.varCustoMedio}
+          deltaAbsolute={kpis.varCustoMedioAbs != null ? signedAmount(kpis.varCustoMedioAbs, formatCustoMedio) : undefined}
           subtitle={kpis.varCustoMedio !== null ? 'vs mês anterior' : undefined}
         />
         <KpiCard
@@ -197,6 +204,7 @@ export default function CorreiosClient() {
           iconBg="bg-mp-head"
           iconColor="text-mp-ghost"
           delta={kpis.varPeso}
+          deltaAbsolute={kpis.varPesoAbs != null ? signedAmount(kpis.varPesoAbs, formatPeso) : undefined}
           subtitle={kpis.varPeso !== null ? 'vs mês anterior' : undefined}
         />
       </div>
